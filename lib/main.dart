@@ -1,4 +1,6 @@
 import 'package:antpire/src/pages/login_page.dart';
+import 'package:antpire/src/pages/register_page.dart';
+import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -11,10 +13,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Antpire',
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: const StartPage(),
       initialRoute: LoginPage.id,
-      routes: {
-        LoginPage.id: (context) => const LoginPage(),
+      routes: <String, WidgetBuilder>{
+        'Home': (BuildContext context) => const StartPage(),
+        'LoginPage': (BuildContext context) => const LoginPage(),
+        'RegisterPage': (BuildContext context) => const RegisterPage()
       },
     );
   }
