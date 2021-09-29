@@ -14,7 +14,7 @@ class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
           children: <Widget>[
@@ -62,8 +62,8 @@ class HomeTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Antpire',
-      style: TextStyle(
-          fontSize: 50.0, fontFamily: 'NotoSans', color: Colors.amber),
+      style:
+          TextStyle(fontSize: 50.0, fontFamily: 'NotoSans', color: Colors.red),
     );
   }
 }
@@ -92,9 +92,9 @@ class TextAntpire extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       '¡Queremos ayudarte con tus finanzas personales!',
-      textAlign: TextAlign.justify,
+      textAlign: TextAlign.center,
       style: TextStyle(
-          fontSize: 16.0, fontFamily: 'NotoSans', color: Colors.white),
+          fontSize: 16.0, fontFamily: 'NotoSans', color: Colors.black),
     );
   }
 }
@@ -108,7 +108,7 @@ class StartButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: TextButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.amber),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           padding: MaterialStateProperty.all<EdgeInsets>(
               const EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -124,7 +124,7 @@ class StartButton extends StatelessWidget {
         },
         child: const Text('Comienza ahora',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
             )),
       ),
     );
@@ -138,7 +138,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 12),
+        textStyle: const TextStyle(fontSize: 12, color: Colors.black),
       ),
       onPressed: () {
         final route =
@@ -147,7 +147,7 @@ class LoginButton extends StatelessWidget {
       },
       child: const Text('Ya tengo una cuenta',
           style: TextStyle(
-            color: Colors.amber,
+            color: Colors.black,
           )),
     );
   }

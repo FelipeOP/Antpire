@@ -1,25 +1,27 @@
-import 'package:antpire/src/pages/login_page.dart';
-import 'package:antpire/src/pages/register_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
+import 'package:antpire/src/routes/antpire_routes.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:firebase_core/firebase_core.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:get/get.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Antpire',
+    return const GetMaterialApp(
+      title: "Antpire",
       debugShowCheckedModeBanner: false,
-      home: const StartPage(),
-      initialRoute: LoginPage.id,
-      routes: <String, WidgetBuilder>{
-        'Home': (BuildContext context) => const StartPage(),
-        'LoginPage': (BuildContext context) => const LoginPage(),
-        'RegisterPage': (BuildContext context) => const RegisterPage()
-      },
+      home: StartPage(),
+      // initialRoute: StartPage.id,
     );
   }
 }
