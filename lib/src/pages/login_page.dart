@@ -11,8 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late String _email;
-  late String _password;
+  // late String _email;
+  // late String _password;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

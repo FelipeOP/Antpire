@@ -14,8 +14,8 @@ class _RegisterPageState extends State<RegisterPage> {
   late String _password2 = '';
   late FocusNode _focusNode;
   static final RegExp _lettersExp = RegExp(r'^[a-zA-Z]+$');
-  static final RegExp _numbersExp = RegExp(r'^[\d]$');
-  static final RegExp _passwordExp = RegExp(r'^[a-zA-Z0-9]+$');
+  static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
+
   @override
   void initState() {
     super.initState();
@@ -185,10 +185,13 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         cursorColor: Colors.grey,
         validator: (String? age) {
+          if (age.toString().isEmpty) {
+            return "El campo no puede estar vacío";
+          }
           if (_numbersExp.hasMatch(age.toString())) {
             int newAge = int.parse(age.toString());
             if (!((newAge > 18) && (newAge < 100))) {
-              return "Digite una edad validad";
+              return "Digite una edad valida";
             }
           } else {
             return "Solo debe contener numeros";
@@ -225,7 +228,7 @@ class _RegisterPageState extends State<RegisterPage> {
           }
           return EmailValidator.validate(email.toString())
               ? null
-              : "Ingrese un e-mail valido";
+              : "Ingrese un e-mail válido";
         });
   }
 
@@ -254,6 +257,11 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
       cursorColor: Colors.grey,
+      validator: (String? password) {
+        return password.toString().isEmpty
+            ? "El campo no puede estar vacío."
+            : null;
+      },
       onChanged: (password) {
         setState(() {
           _password2 = password;
