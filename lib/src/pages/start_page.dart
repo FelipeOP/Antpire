@@ -3,7 +3,6 @@ import 'package:antpire/src/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
 class StartPage extends StatefulWidget {
-  static String id = 'start_page';
   const StartPage({Key? key}) : super(key: key);
 
   @override
@@ -22,30 +21,21 @@ class _StartPageState extends State<StartPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   HomeLogo(),
-                  HomeTitle(),
-                  // SizedBox(
-                  //   width: 550.0,
-                  //   height: 50.0,
-                  //   child: Divider(color: Colors.black),
-                  // ),
                   SizedBox(
                       width: 30.0,
                       height: 30.0,
                       child: Divider(
                         color: Colors.white,
                       )),
+                  HomeTitle(),
+                  SizedBox(
+                      height: 60.0,
+                      child: Divider(
+                        color: Colors.black,
+                      )),
                   TextAntpire(),
-                  Divider(
-                    height: 60.0,
-                  ),
+                  Divider(height: 30.0, color: Colors.transparent),
                   StartButton(),
-                  // SizedBox(
-                  //   width: 5,
-                  //   height: 5,
-                  //   child: Divider(
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
                   LoginButton()
                 ])
           ]),
@@ -62,8 +52,11 @@ class HomeTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Antpire',
-      style:
-          TextStyle(fontSize: 50.0, fontFamily: 'NotoSans', color: Colors.red),
+      style: TextStyle(
+          fontSize: 50.0,
+          fontFamily: 'Josefinsans',
+          color: Colors.red,
+          fontWeight: FontWeight.bold),
     );
   }
 }
@@ -77,8 +70,12 @@ class HomeLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CircleAvatar(
       radius: 130.0,
-      backgroundImage: AssetImage('images/home.jpeg'),
       backgroundColor: Colors.black,
+      child: CircleAvatar(
+        radius: 128.0,
+        backgroundImage: AssetImage('images/home.jpeg'),
+        backgroundColor: Colors.white,
+      ),
     );
   }
 }
@@ -94,7 +91,10 @@ class TextAntpire extends StatelessWidget {
       '¡Queremos ayudarte con tus finanzas personales!',
       textAlign: TextAlign.center,
       style: TextStyle(
-          fontSize: 16.0, fontFamily: 'NotoSans', color: Colors.black),
+          fontSize: 20.0,
+          fontFamily: 'Josefinsans',
+          color: Colors.black,
+          fontWeight: FontWeight.bold),
     );
   }
 }

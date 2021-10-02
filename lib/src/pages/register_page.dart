@@ -1,5 +1,6 @@
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -9,8 +10,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final String _nombre = '';
+  late String _password = '';
+  late String _password2 = '';
   late FocusNode _focusNode;
+  static final RegExp _lettersExp = RegExp(r'^[a-zA-Z]+$');
+  static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               // ignore: prefer_const_literals_to_create_immutables
               children: <Widget>[
+                const Divider(),
                 const Divider(),
                 _textTitle(),
                 const Divider(),
@@ -84,167 +89,202 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // FocusNode ourFocusNode() {
-  //   FocusNode _focusNode;
-
-  // }
-
   Widget _inputName() {
-    return const TextField(
-      keyboardType: TextInputType.name,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        hintText: 'Ingrese su(s) nombre(s)',
-        labelText: 'Nombre: ',
-        suffixIcon: Icon(Icons.accessibility, color: Colors.red),
-        icon: Icon(
-          Icons.account_circle,
-          color: Colors.red,
+    return TextFormField(
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: TextInputType.name,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          hintText: 'Ingrese su(s) nombre(s)',
+          labelText: 'Nombre: ',
+          //helperText: '',
+          labelStyle: TextStyle(color: Colors.grey),
+          suffixIcon: Icon(Icons.accessibility, color: Colors.red),
+          focusColor: Colors.red,
+          fillColor: Colors.grey,
+          hoverColor: Colors.grey,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 3.0),
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
         ),
-        focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red, width: 3.0),
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-      ),
-      cursorColor: Colors.red,
-    );
+        cursorColor: Colors.grey,
+        validator: (String? name) {
+          if (name.toString().isEmpty) {
+            return 'El campo no puede estar vacío';
+          }
+          return _lettersExp.hasMatch(name.toString())
+              ? null
+              : "Solo debe contener letras";
+        });
   }
 
   Widget _inputLastName() {
-    return const TextField(
-      keyboardType: TextInputType.name,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        hintText: 'Ingrese su(s) apellido(s)',
-        labelText: 'Apellidos: ',
-        suffixIcon: Icon(Icons.contact_support, color: Colors.red),
-        icon: Icon(
-          Icons.contact_page_rounded,
-          color: Colors.red,
+    return TextFormField(
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: TextInputType.name,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          hintText: 'Ingrese su(s) apellido(s)',
+          labelStyle: TextStyle(color: Colors.grey),
+          labelText: 'Apellidos: ',
+          suffixIcon: Icon(Icons.contact_support, color: Colors.red),
+          focusColor: Colors.red,
+          fillColor: Colors.grey,
+          hoverColor: Colors.grey,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 3.0),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
         ),
-        focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 3.0),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      ),
-      cursorColor: Colors.red,
-    );
+        cursorColor: Colors.grey,
+        validator: (String? surnames) {
+          if (surnames.toString().isEmpty) {
+            return 'El campo no puede estar vacío';
+          }
+          return _lettersExp.hasMatch(surnames.toString())
+              ? null
+              : "Solo debe contener letras";
+        });
   }
 
   Widget _age() {
-    return const TextField(
-      keyboardType: TextInputType.number,
-      textCapitalization: TextCapitalization.sentences,
-      style: TextStyle(fontSize: 18, color: Colors.red),
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        hintText: 'Ingrese su edad',
-        labelText: 'Edad: ',
-        helperText: 'Unicamente números',
-        suffixIcon: Icon(Icons.calendar_today_sharp, color: Colors.red),
-        icon: Icon(
-          Icons.pin,
-          color: Colors.red,
+    return TextFormField(
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: TextInputType.number,
+        textCapitalization: TextCapitalization.sentences,
+        style: const TextStyle(fontSize: 18, color: Colors.red),
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          hintText: 'Ingrese su edad',
+          labelStyle: TextStyle(color: Colors.grey),
+          labelText: 'Edad: ',
+          suffixIcon: Icon(Icons.pin, color: Colors.red),
+          focusColor: Colors.red,
+          fillColor: Colors.grey,
+          hoverColor: Colors.grey,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 3.0),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
         ),
-        focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 3.0),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      ),
-      // cursorColor: Colors.red,
-      // validator: (String? age) {
-      //   RegExp r = new RegExp(r"^[1-9]$");
-      //   // ignore: avoid_print
-      //   return r.hasMatch(age.toString()) ? null : 'Solo numeros';
-      // }
-    );
+        cursorColor: Colors.grey,
+        validator: (String? age) {
+          if (age.toString().isEmpty) {
+            return "El campo no puede estar vacío";
+          }
+          if (_numbersExp.hasMatch(age.toString())) {
+            int newAge = int.parse(age.toString());
+            if (!((newAge > 18) && (newAge < 100))) {
+              return "Digite una edad valida";
+            }
+          } else {
+            return "Solo debe contener numeros";
+          }
+        });
   }
 
   Widget _email() {
-    return const TextField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-        hintText: 'user@example.com',
-        labelText: 'Email: ',
-        suffixIcon: Icon(Icons.alternate_email, color: Colors.red),
-        icon: Icon(
-          Icons.email,
-          color: Colors.red,
+    return TextFormField(
+        autovalidateMode: AutovalidateMode.always,
+        keyboardType: TextInputType.emailAddress,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          hintText: 'user@example.com',
+          labelStyle: TextStyle(color: Colors.grey),
+          labelText: 'Email: ',
+          suffixIcon: Icon(Icons.alternate_email, color: Colors.red),
+          focusColor: Colors.red,
+          fillColor: Colors.grey,
+          hoverColor: Colors.grey,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 3.0),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
         ),
-        focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 3.0),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-      ),
-      cursorColor: Colors.red,
-    );
+        cursorColor: Colors.grey,
+        validator: (String? email) {
+          if (email.toString().isEmpty) {
+            return 'El campo no puede estar vacío';
+          }
+          return EmailValidator.validate(email.toString())
+              ? null
+              : "Ingrese un e-mail válido";
+        });
   }
 
-  //
   Widget _inputPassword() {
-    return const TextField(
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
       obscureText: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         hintText: 'Más de 8 caracteres',
+        labelStyle: TextStyle(color: Colors.grey),
         labelText: 'Contraseña ',
         helperText: 'Incluya letras y numeros',
         suffixIcon: Icon(Icons.lock_outline, color: Colors.red),
-        icon: Icon(
-          Icons.lock_open_outlined,
-          color: Colors.red,
-        ),
         focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
+        fillColor: Colors.grey,
+        hoverColor: Colors.grey,
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 3.0),
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
-      cursorColor: Colors.red,
+      cursorColor: Colors.grey,
+      validator: (String? password) {
+        return password.toString().isEmpty
+            ? "El campo no puede estar vacío."
+            : null;
+      },
+      onChanged: (password) {
+        setState(() {
+          _password2 = password;
+        });
+      },
     );
   }
 
   Widget _validatePassword() {
-    return const TextField(
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
       obscureText: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         hintText: 'Confirme su contraseña',
+        labelStyle: TextStyle(color: Colors.grey),
         labelText: 'Confirmar Contraseña ',
         helperText: 'Incluya letras y numeros',
         suffixIcon: Icon(Icons.password_outlined, color: Colors.red),
-        icon: Icon(
-          Icons.lock_open_outlined,
-          color: Colors.red,
-        ),
         focusColor: Colors.red,
-        fillColor: Colors.red,
-        hoverColor: Colors.red,
+        fillColor: Colors.grey,
+        hoverColor: Colors.grey,
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 3.0),
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
-      cursorColor: Colors.red,
+      cursorColor: Colors.grey,
+      validator: (String? password) {
+        if (password.toString().isEmpty) {
+          return 'El campo no puede estar vacío';
+        }
+        return verifyPassword() ? null : "Las contraseñas deben coincidir";
+      },
+      onChanged: (password) {
+        setState(() {
+          _password = password;
+        });
+      },
     );
+  }
+
+  bool verifyPassword() {
+    return _password.compareTo(_password2) == 0;
   }
 
   Widget _continueButton() {
