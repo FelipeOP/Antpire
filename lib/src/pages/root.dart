@@ -1,6 +1,7 @@
+import 'package:antpire/src/pages/home.dart';
+import 'package:antpire/src/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/register_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
@@ -11,17 +12,19 @@ class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Config().init(context);
-
+    // ignore: avoid_print
+    print('Entrando al root');
+    // ignore: avoid_print
     return Scaffold(
       backgroundColor: Colors.white,
       body: GetBuilder<AuthController>(
         builder: (_) {
+          // ignore: avoid_print
+          print('Estado: ${_.isSignedIn}');
           return SafeArea(
             child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _.isSignedIn.value
-                    ? const StartPage()
-                    : const RegisterPage()),
+                child: _.isSignedIn.value ? const Home() : const LoginPage()),
           );
         },
       ),

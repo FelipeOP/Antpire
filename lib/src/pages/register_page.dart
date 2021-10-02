@@ -1,6 +1,8 @@
+import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:get/get.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -10,23 +12,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late String _password = '';
-  late String _password2 = '';
-  late FocusNode _focusNode;
+  final _formKey = GlobalKey<FormState>();
+  final _authController = Get.find<AuthController>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   static final RegExp _lettersExp = RegExp(r'^[a-zA-Z]+$');
   static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +30,32 @@ class _RegisterPageState extends State<RegisterPage> {
             vertical: 50.0,
           ),
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // ignore: prefer_const_literals_to_create_immutables
-              children: <Widget>[
-                const Divider(),
-                const Divider(),
-                _textTitle(),
-                const Divider(),
-                _antpireLogo(),
-                const Divider(),
-                _inputName(),
-                const Divider(),
-                _inputLastName(),
-                const Divider(),
-                _age(),
-                const Divider(),
-                _email(),
-                const Divider(),
-                _inputPassword(),
-                const Divider(),
-                _validatePassword(),
-                const Divider(),
-                _continueButton()
-              ],
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Divider(),
+                  const Divider(),
+                  _textTitle(),
+                  const Divider(),
+                  _antpireLogo(),
+                  const Divider(),
+                  _inputName(),
+                  const Divider(),
+                  _inputLastName(),
+                  const Divider(),
+                  _age(),
+                  const Divider(),
+                  _email(),
+                  const Divider(),
+                  _inputPassword(),
+                  const Divider(),
+                  _validatePassword(),
+                  const Divider(),
+                  _continueButton()
+                ],
+              ),
             ),
           ],
         ),
@@ -91,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputName() {
     return TextFormField(
+        controller: _nameController,
         autovalidateMode: AutovalidateMode.always,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.sentences,
@@ -156,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
         autovalidateMode: AutovalidateMode.always,
         keyboardType: TextInputType.number,
         textCapitalization: TextCapitalization.sentences,
-        style: const TextStyle(fontSize: 18, color: Colors.red),
+        //style: const TextStyle(fontSize: 18, color: Colors.red),
         decoration: const InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -189,6 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _email() {
     return TextFormField(
+        controller: _emailController,
         autovalidateMode: AutovalidateMode.always,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
@@ -218,6 +214,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputPassword() {
     return TextFormField(
+      controller: _passwordController,
       autovalidateMode: AutovalidateMode.always,
       obscureText: true,
       decoration: const InputDecoration(
@@ -241,11 +238,11 @@ class _RegisterPageState extends State<RegisterPage> {
             ? "El campo no puede estar vacío."
             : null;
       },
-      onChanged: (password) {
-        setState(() {
-          _password2 = password;
-        });
-      },
+      // onChanged: (password) {
+      //   setState(() {
+      //     _password2 = password;
+      //   });
+      // },
     );
   }
 
@@ -273,18 +270,20 @@ class _RegisterPageState extends State<RegisterPage> {
         if (password.toString().isEmpty) {
           return 'El campo no puede estar vacío';
         }
-        return verifyPassword() ? null : "Las contraseñas deben coincidir";
+        return verifyPassword(password!)
+            ? null
+            : "Las contraseñas deben coincidir";
       },
-      onChanged: (password) {
-        setState(() {
-          _password = password;
-        });
-      },
+      // onChanged: (password) {
+      //   setState(() {
+      //     _password = password;
+      //   });
+      // },
     );
   }
 
-  bool verifyPassword() {
-    return _password.compareTo(_password2) == 0;
+  bool verifyPassword(String password) {
+    return _passwordController.text.compareTo(password) == 0;
   }
 
   Widget _continueButton() {
@@ -303,7 +302,14 @@ class _RegisterPageState extends State<RegisterPage> {
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           overlayColor: MaterialStateProperty.all<Color>(Colors.red.shade800),
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            String name = _nameController.text.trim();
+            String email = _emailController.text.trim();
+            String password = _passwordController.text;
+            _authController.signUp(name, email, password);
+          }
+        },
         child: const Text('Continuar'),
       ),
     );

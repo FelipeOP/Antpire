@@ -27,13 +27,13 @@ class AuthController extends GetxController {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {
         displayName = name;
-        auth.currentUser!.updateProfile(displayName: displayName);
+        auth.currentUser!.updateDisplayName(name);
       });
 
       update();
       Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
-      String title = e.code.replaceAll(RegExp('-'), '').capitalize!;
+      String title = e.code.replaceAll(RegExp('-'), '');
       String message = '';
 
       if (e.code == 'weak-password') {
@@ -61,17 +61,21 @@ class AuthController extends GetxController {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) => displayName = userProfile!.displayName!);
+      isSignedIn.value = true;
       update();
+      Get.offAll(() => Root());
     } on FirebaseAuthException catch (e) {
-      String title = e.code.replaceAll(RegExp('-'), '').capitalize!;
+      String title = '';
       String message = '';
-
       if (e.code == 'wrong-password') {
+        title = 'Contraseña incorrecta!';
         message = 'Contraseña inválida. Por favor inténtalo de nuevo';
       } else if (e.code == 'user-not-found') {
+        title = 'El usuario no está registrado.';
         message =
             ('La cuenta no existe para $email. Crea tu cuenta para iniciar sesión.');
       } else {
+        title = 'Se ha producido un error inesperado.';
         message = e.message.toString();
       }
 
@@ -93,6 +97,7 @@ class AuthController extends GetxController {
       displayName = googleAcc.value!.displayName!;
       isSignedIn.value = true;
       update(); // <-- without this the isSignedin value is not updated.
+
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,
@@ -106,7 +111,7 @@ class AuthController extends GetxController {
       await auth.sendPasswordResetEmail(email: email);
       Get.back();
     } on FirebaseAuthException catch (e) {
-      String title = e.code.replaceAll(RegExp('-'), '').capitalize!;
+      String title = '';
       String message = '';
 
       if (e.code == 'user-not-found') {
@@ -135,19 +140,12 @@ class AuthController extends GetxController {
       displayName = '';
       isSignedIn.value = false;
       update();
-      // Get.offAll(() => Root());
+      Get.offAll(() => Root());
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
-  }
-}
-
-// // to capitalize first letter of a Sting
-extension StringExtension on String {
-  String capitalizeString() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }
