@@ -35,12 +35,17 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Divider(),
-                  const Divider(),
+                  const Divider(
+                    color: Colors.white,
+                  ),
                   _textTitle(),
-                  const Divider(),
+                  const Divider(
+                    color: Colors.white,
+                  ),
                   _antpireLogo(),
-                  const Divider(),
+                  const Divider(
+                    color: Colors.white,
+                  ),
                   _inputName(),
                   const Divider(),
                   _inputLastName(),
@@ -86,15 +91,15 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _inputName() {
     return TextFormField(
         controller: _nameController,
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.sentences,
         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su(s) nombre(s)',
           labelText: 'Nombre: ',
-          //helperText: '',
           labelStyle: TextStyle(color: Colors.grey),
           suffixIcon: Icon(Icons.accessibility, color: Colors.red),
           focusColor: Colors.red,
@@ -118,10 +123,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputLastName() {
     return TextFormField(
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.sentences,
         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su(s) apellido(s)',
@@ -148,11 +154,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _age() {
     return TextFormField(
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.number,
         textCapitalization: TextCapitalization.sentences,
         //style: const TextStyle(fontSize: 18, color: Colors.red),
         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su edad',
@@ -185,9 +192,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _email() {
     return TextFormField(
         controller: _emailController,
-        autovalidateMode: AutovalidateMode.always,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.emailAddress,
         decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(15),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'user@example.com',
@@ -214,10 +222,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputPassword() {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: _passwordController,
-      autovalidateMode: AutovalidateMode.always,
       obscureText: true,
       decoration: const InputDecoration(
+        contentPadding: EdgeInsets.all(15),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         hintText: 'Más de 8 caracteres',
@@ -248,9 +257,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _validatePassword() {
     return TextFormField(
-      autovalidateMode: AutovalidateMode.always,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: true,
       decoration: const InputDecoration(
+        contentPadding: EdgeInsets.all(15),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         hintText: 'Confirme su contraseña',
@@ -274,11 +284,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ? null
             : "Las contraseñas deben coincidir";
       },
-      // onChanged: (password) {
-      //   setState(() {
-      //     _password = password;
-      //   });
-      // },
     );
   }
 
@@ -317,13 +322,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _antpireLogo() {
     return const CircleAvatar(
-      radius: 122.0,
-      backgroundColor: Colors.black,
-      child: CircleAvatar(
-        radius: 120.0,
-        backgroundImage: AssetImage('images/icon.png'),
-        backgroundColor: Colors.white,
-      ),
+      radius: 120.0,
+      backgroundImage: AssetImage('images/icon.png'),
+      backgroundColor: Colors.white,
     );
   }
 }

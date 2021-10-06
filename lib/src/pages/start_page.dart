@@ -21,12 +21,6 @@ class _StartPageState extends State<StartPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   HomeLogo(),
-                  SizedBox(
-                      width: 30.0,
-                      height: 30.0,
-                      child: Divider(
-                        color: Colors.white,
-                      )),
                   HomeTitle(),
                   SizedBox(
                       height: 60.0,
@@ -70,12 +64,8 @@ class HomeLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CircleAvatar(
       radius: 130.0,
-      backgroundColor: Colors.black,
-      child: CircleAvatar(
-        radius: 128.0,
-        backgroundImage: AssetImage('images/home.jpeg'),
-        backgroundColor: Colors.white,
-      ),
+      backgroundImage: AssetImage('images/home.jpeg'),
+      backgroundColor: Colors.white,
     );
   }
 }

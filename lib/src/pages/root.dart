@@ -12,20 +12,12 @@ class Root extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Config().init(context);
-    // ignore: avoid_print
-    print('Entrando al root');
-    // ignore: avoid_print
     return Scaffold(
       backgroundColor: Colors.white,
       body: GetBuilder<AuthController>(
         builder: (_) {
-          // ignore: avoid_print
-          print('Estado: ${_.isSignedIn}');
           return SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _.isSignedIn.value ? const Home() : const LoginPage()),
-          );
+              child: _.isSignedIn.value ? const Home() : const LoginPage());
         },
       ),
     );

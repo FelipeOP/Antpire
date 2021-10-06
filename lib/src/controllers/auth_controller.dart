@@ -29,11 +29,10 @@ class AuthController extends GetxController {
         displayName = name;
         auth.currentUser!.updateDisplayName(name);
       });
-
       update();
       Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
-      String title = e.code.replaceAll(RegExp('-'), '');
+      String title = e.code;
       String message = '';
 
       if (e.code == 'weak-password') {
