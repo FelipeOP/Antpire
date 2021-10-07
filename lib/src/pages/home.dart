@@ -1,4 +1,5 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
+import 'package:antpire/src/pages/user_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +14,7 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _titles = <Widget>[
     Text(
       'Gastos',
       style: optionStyle,
@@ -36,6 +37,26 @@ class _HomeState extends State<Home> {
     ),
   ];
 
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Gastos',
+      style: optionStyle,
+    ),
+    Text(
+      'Reportes',
+      style: optionStyle,
+    ),
+    Text(
+      'Inicio',
+      style: optionStyle,
+    ),
+    Text(
+      'Notificaciones',
+      style: optionStyle,
+    ),
+    UserAccount()
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -47,24 +68,17 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,
-        title: _widgetOptions.elementAt(_selectedIndex),
+        title: _titles.elementAt(_selectedIndex),
         backgroundColor: Colors.red,
+        centerTitle: true,
       ),
       body: Center(
         child: GetBuilder<AuthController>(
           builder: (_authController) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            return ListView(
+              padding: const EdgeInsets.all(20),
               children: [
-                Text(
-                  'Hello ${_authController.displayName.toString()}!',
-                ),
                 _widgetOptions.elementAt(_selectedIndex),
-                Expanded(flex: 8, child: Container()),
-                TextButton(
-                  child: const Text('Sign out'),
-                  onPressed: () => _authController.signout(),
-                ),
               ],
             );
           },

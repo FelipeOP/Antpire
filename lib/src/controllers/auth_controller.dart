@@ -1,4 +1,5 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
+import 'package:antpire/src/pages/home.dart';
 import 'package:antpire/src/pages/root.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show Colors;
@@ -10,7 +11,7 @@ class AuthController extends GetxController {
   var displayName = '';
   FirebaseAuth auth = FirebaseAuth.instance;
   var _googleSignIn = GoogleSignIn();
-  var googleAcc = Rx<GoogleSignInAccount?>(null);
+  var googleAccount = Rx<GoogleSignInAccount?>(null);
   var isSignedIn = false.obs;
 
   User? get userProfile => auth.currentUser;
@@ -62,7 +63,7 @@ class AuthController extends GetxController {
           .then((value) => displayName = userProfile!.displayName!);
       isSignedIn.value = true;
       update();
-      Get.offAll(() => Root());
+      Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
       String title = '';
       String message = '';
@@ -92,11 +93,13 @@ class AuthController extends GetxController {
 
   void signInWithGoogle() async {
     try {
-      googleAcc.value = await _googleSignIn.signIn();
-      displayName = googleAcc.value!.displayName!;
-      isSignedIn.value = true;
+      googleAccount.value = await _googleSignIn.signIn();
+      displayName = googleAccount.value!.displayName!;
+      if (googleAccount.value != null) {
+        isSignedIn.value = true;
+        Get.offAll(() => const Root());
+      }
       update(); // <-- without this the isSignedin value is not updated.
-
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,
@@ -139,7 +142,7 @@ class AuthController extends GetxController {
       displayName = '';
       isSignedIn.value = false;
       update();
-      Get.offAll(() => Root());
+      Get.offAll(() => const Root());
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,

@@ -1,6 +1,7 @@
 import 'package:antpire/src/pages/login_page.dart';
 import 'package:antpire/src/pages/register_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -131,9 +132,7 @@ class LoginButton extends StatelessWidget {
         textStyle: const TextStyle(fontSize: 12, color: Colors.black),
       ),
       onPressed: () {
-        final route =
-            MaterialPageRoute(builder: (context) => const LoginPage());
-        Navigator.push(context, route);
+        Get.to(() => const LoginPage());
       },
       child: const Text('Ya tengo una cuenta',
           style: TextStyle(

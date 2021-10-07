@@ -6,7 +6,7 @@ Una aplicacion que te ayuda con tus finanzas personales
 - Dart 2.14.2
 - [Android Command Line](http://https://developer.android.com/studio?gclid=EAIaIQobChMI3s6N5JCe8wIVTeG1Ch1-zwq0EAAYASAAEgJlpvD_BwE&gclsrc=aw.ds#downloads "Android Command Line")
 
-##Instalación Andorid SDK en Windows 10
+## Instalación Andorid SDK en Windows 10
 Una vez ya descargada la linea de comandos de android, se debe descomprimir y ajustar para que la ruta quede de la siguiente manea:
 > C:\android-sdk\cmdline-tools\latest\ourzipfile
 
@@ -31,7 +31,7 @@ SETX JAVA_HOME C:\Program Files\Java\jdk-11.0.10
 >sdkmanager "system-images;android-29;google_apis_playstore;x86_64"
 >sdkmanager "emulator"
 
-Para ejectutar el emulador de sebe agregar el path:
+Para ejectutar el emulador se debe agregar el path:
 >SETX emulator C:\android-sdk\emulator
 
 Para crear un dispotivo se usa el siguiente comando:
@@ -55,7 +55,12 @@ Se abre VS Code y se descarga la [extensión ](https://marketplace.visualstudio.
 Start myDevice
 
 Ya se puede ejecutar o debuggear la aplicación  para ver la vista previa en nuestro emulador.
+### Obtener certificado SHA
+> cd android
+>./gradlew signingReport
+>Task.app.signingReport
 
 ## Recursos
 - [Docmuentacion de Flutter](https://flutter.dev/docs). Tutoriales, ejemplos y la referencia a la API
 - [Pub.dev](https://pub.dev "Pub.dev"). El repositorio oficial de paquetes para las aplicaciones Dart y Flutter.
+

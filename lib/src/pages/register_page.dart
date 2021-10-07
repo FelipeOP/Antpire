@@ -58,7 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Divider(),
                   _validatePassword(),
                   const Divider(),
-                  _continueButton()
+                  _continueButton(),
                 ],
               ),
             ),
@@ -66,14 +66,13 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
         floatingActionButton: FloatingActionButton(
+          mini: true,
           child: const Icon(Icons.arrow_back),
           backgroundColor: Colors.red[800],
           focusColor: Colors.red[800],
           autofocus: true,
           onPressed: () {
-            final route =
-                MaterialPageRoute(builder: (context) => const StartPage());
-            Navigator.push(context, route);
+            Get.to(() => const StartPage());
           },
         ));
   }
@@ -247,11 +246,6 @@ class _RegisterPageState extends State<RegisterPage> {
             ? "El campo no puede estar vacío."
             : null;
       },
-      // onChanged: (password) {
-      //   setState(() {
-      //     _password2 = password;
-      //   });
-      // },
     );
   }
 

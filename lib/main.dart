@@ -1,5 +1,6 @@
 import 'package:antpire/controller_bindings.dart';
 import 'package:antpire/src/pages/start_page.dart';
+import 'package:antpire/src/pages/restore_page.dart';
 import 'package:antpire/src/routes/antpire_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

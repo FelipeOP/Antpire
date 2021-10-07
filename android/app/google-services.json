@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "498290082247",
+    "firebase_url": "https://antpire-is-default-rtdb.firebaseio.com",
     "project_id": "antpire-is",
     "storage_bucket": "antpire-is.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "498290082247-cb5l5nbro467rtia8lam9jo9ae7hi897.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.antpire",
+            "certificate_hash": "15927cb77ae688168383548ea60e043ac957d80c"
+          }
+        },
         {
           "client_id": "498290082247-ji14msikbjuvchh9348u282b28eh9i0u.apps.googleusercontent.com",
           "client_type": 3

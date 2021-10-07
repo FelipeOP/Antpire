@@ -1,5 +1,6 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/home.dart';
+import 'package:antpire/src/pages/restore_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     _passwordField(),
                     _signInButton(),
                     _signInButtonGoogle(),
+                    _restoreButton(),
                   ],
                 ),
               ),
@@ -51,18 +53,30 @@ class _LoginPageState extends State<LoginPage> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
           floatingActionButton: FloatingActionButton(
+            mini: true,
             child: const Icon(Icons.arrow_back),
             backgroundColor: Colors.red[800],
             focusColor: Colors.red[800],
             autofocus: true,
             onPressed: () {
               Get.to(() => const StartPage());
-              // final route =
-              //     MaterialPageRoute(builder: (context) => const StartPage());
-              // Navigator.push(context, route);
             },
           )),
     );
+  }
+
+  TextButton _restoreButton() {
+    return TextButton(
+        style: TextButton.styleFrom(
+          textStyle: const TextStyle(fontSize: 10, color: Colors.black),
+        ),
+        onPressed: () {
+          Get.to(() => RestorePage());
+        },
+        child: const Text(
+          'Olvidaste tu contraseña?',
+          style: TextStyle(color: Colors.blue),
+        ));
   }
 
   CircleAvatar _loginImage() {
@@ -186,9 +200,7 @@ class _LoginPageState extends State<LoginPage> {
           side: const BorderSide(width: 1, color: Colors.black)),
       buttonType: ButtonType.google,
       onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          _authController.signInWithGoogle();
-        }
+        _authController.signInWithGoogle();
       },
     );
   }
