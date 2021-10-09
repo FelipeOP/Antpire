@@ -44,6 +44,7 @@ En caso de que se hayan creado muchos por error, se pueden borrar copiando la si
 #### Licencias
 Antes de usar el Android SDK se deben aceptar unas licencias, se deben ejecutar los siguientes comandos: 
 >flutter doctor \--android-licenses
+
 >sdkmanager \--licenses
 
 #### Pasos finales
@@ -52,13 +53,15 @@ Para verificar que todo se haya instalado correctamente se ejecuta el siguiente 
 
 Se abre VS Code y se descarga la [extensión ](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter "extensión ")para Flutter.  Se presiona **Ctrl + Shift + P ** y se escribe el siguiente comando:
 > \>Flutter: Select Device
-Start myDevice
+> Start myDevice
 
 Ya se puede ejecutar o debuggear la aplicación  para ver la vista previa en nuestro emulador.
 ### Obtener certificado SHA
 > cd android
->./gradlew signingReport
->Task.app.signingReport
+
+> ./gradlew signingReport
+
+> Task.app.signingReport
 
 ## Recursos
 - [Docmuentacion de Flutter](https://flutter.dev/docs). Tutoriales, ejemplos y la referencia a la API

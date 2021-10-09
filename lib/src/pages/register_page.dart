@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:antpire/src/controllers/auth_controller.dart';
+import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
@@ -14,9 +17,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _authController = Get.find<AuthController>();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _namesController = TextEditingController();
+  final TextEditingController _surnamesController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   static final RegExp _lettersExp = RegExp(r'^[a-zA-Z]+$');
   static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
 
@@ -89,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputName() {
     return TextFormField(
-        controller: _nameController,
+        controller: _namesController,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.sentences,
@@ -122,6 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputLastName() {
     return TextFormField(
+        controller: _surnamesController,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.sentences,
@@ -153,6 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _age() {
     return TextFormField(
+        controller: _ageController,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.number,
         textCapitalization: TextCapitalization.sentences,
@@ -221,8 +229,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _inputPassword() {
     return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: _passwordController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       obscureText: true,
       decoration: const InputDecoration(
         contentPadding: EdgeInsets.all(15),
@@ -303,10 +311,16 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            String name = _nameController.text.trim();
-            String email = _emailController.text.trim();
-            String password = _passwordController.text;
-            _authController.signUp(name, email, password);
+            String _id = '';
+            String _names = _namesController.text.trim();
+            String _surnames = _surnamesController.text.trim();
+            int _age = int.parse(_ageController.text.trim());
+            String _email = _emailController.text.trim();
+            String _password = _passwordController.text.trim();
+            Person person =
+                Person(_id, _names, _surnames, _email, _password, _age, 0, 'a');
+            _authController.signUp(_names, _email, _password, person);
+            // _authController.addUserInformation(person);
           }
         },
         child: const Text('Continuar'),

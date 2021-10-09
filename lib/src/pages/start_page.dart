@@ -1,3 +1,4 @@
+import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/login_page.dart';
 import 'package:antpire/src/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -109,9 +110,7 @@ class StartButton extends StatelessWidget {
           )),
         ),
         onPressed: () {
-          final route =
-              MaterialPageRoute(builder: (context) => const RegisterPage());
-          Navigator.push(context, route);
+          Get.to(() => const RegisterPage());
         },
         child: const Text('Comienza ahora',
             style: TextStyle(

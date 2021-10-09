@@ -87,27 +87,27 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_atm_rounded),
+            icon: const Icon(Icons.local_atm_rounded),
             backgroundColor: Colors.red[400],
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assessment),
-            backgroundColor: Colors.red[500],
+            icon: const Icon(Icons.assessment),
+            backgroundColor: Colors.red[400],
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            backgroundColor: Colors.red,
+            icon: const Icon(Icons.home),
+            backgroundColor: Colors.red[400],
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            backgroundColor: Colors.red[500],
+            icon: const Icon(Icons.notifications),
+            backgroundColor: Colors.red[400],
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: const Icon(Icons.account_circle),
             backgroundColor: Colors.red[400],
             label: '',
           ),

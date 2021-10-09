@@ -1,6 +1,8 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
+import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/home.dart';
 import 'package:antpire/src/pages/root.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:get/get.dart';
@@ -9,10 +11,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthController extends GetxController {
   var displayName = '';
-  FirebaseAuth auth = FirebaseAuth.instance;
-  var _googleSignIn = GoogleSignIn();
-  var googleAccount = Rx<GoogleSignInAccount?>(null);
   var isSignedIn = false.obs;
+  final _googleSignIn = GoogleSignIn();
+  var googleAccount = Rx<GoogleSignInAccount?>(null);
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   User? get userProfile => auth.currentUser;
 
@@ -22,7 +25,7 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  void signUp(String name, String email, String password) async {
+  void signUp(String name, String email, String password, Person person) async {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -31,6 +34,7 @@ class AuthController extends GetxController {
         auth.currentUser!.updateDisplayName(name);
       });
       update();
+      addUserInformation(person);
       Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
       String title = e.code;
@@ -100,6 +104,7 @@ class AuthController extends GetxController {
         Get.offAll(() => const Root());
       }
       update(); // <-- without this the isSignedin value is not updated.
+
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,
@@ -149,5 +154,23 @@ class AuthController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white);
     }
+  }
+
+  Future<void> addUserInformation(Person person) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(auth.currentUser!.uid.toString())
+          .set(person.toMap());
+    } catch (e) {
+      Get.snackbar('Error occured!', e.toString(),
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white);
+    }
+  }
+
+  Future<void> addFinalcialInformation() async {
+    //TODO
   }
 }

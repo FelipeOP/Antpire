@@ -72,7 +72,7 @@ class RestorePage extends StatelessWidget {
                         shape: const RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50)))),
-                    child: const Text("Enviar Código"),
+                    child: const Text("Recuperar Contraseña"),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         String email = _emailController.text.trim();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:antpire/src/pages/start_page.dart';
+import 'package:get/get.dart';
 
 class ReturnButton extends StatelessWidget {
   const ReturnButton({Key? key, required route}) : super(key: key);
@@ -12,9 +13,7 @@ class ReturnButton extends StatelessWidget {
       focusColor: Colors.red[800],
       autofocus: true,
       onPressed: () {
-        final route =
-            MaterialPageRoute(builder: (context) => const StartPage());
-        Navigator.push(context, route);
+        Get.to(() => StartPage());
       },
     );
   }

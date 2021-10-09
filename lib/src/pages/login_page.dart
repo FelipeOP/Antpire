@@ -9,8 +9,6 @@ import 'package:sign_button/create_button.dart';
 import 'package:sign_button/sign_button.dart';
 
 class LoginPage extends StatefulWidget {
-  static String id = 'login_page';
-
   const LoginPage({Key? key}) : super(key: key);
 
   @override
