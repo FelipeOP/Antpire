@@ -1,5 +1,4 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
-import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

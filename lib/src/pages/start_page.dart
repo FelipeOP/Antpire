@@ -1,4 +1,3 @@
-import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/login_page.dart';
 import 'package:antpire/src/pages/register_page.dart';
 import 'package:flutter/material.dart';

@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class SpendingPage extends StatelessWidget {
+  const SpendingPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const CircleAvatar(
+          radius: 130.0,
+          backgroundImage: AssetImage('images/home.jpeg'),
+          backgroundColor: Colors.white,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text('¿Cómo va todo?',
+              style: GoogleFonts.josefinSans(
+                  textStyle: const TextStyle(
+                      fontSize: 31, fontWeight: FontWeight.bold))),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(550, 10),
+                  primary: Colors.red,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)))),
+              icon: const Icon(Icons.arrow_right),
+              label: const Text('Historial de gastos'),
+              onPressed: () {}),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(550, 10),
+                  primary: Colors.red,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)))),
+              icon: const Icon(Icons.arrow_right),
+              label: const Text('Reporte de gastos'),
+              onPressed: () {}),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(550, 10),
+                  primary: Colors.red,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)))),
+              icon: const Icon(Icons.arrow_right),
+              label: const Text('Balances'),
+              onPressed: () {}),
+        ),
+      ],
+    );
+  }
+}

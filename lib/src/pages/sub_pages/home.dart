@@ -1,8 +1,8 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
-import 'package:antpire/src/pages/user_account.dart';
+import 'package:antpire/src/pages/sub_pages/spending_page.dart';
+import 'package:antpire/src/pages/sub_pages/user_account.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -42,10 +42,7 @@ class _HomeState extends State<Home> {
       'Gastos',
       style: optionStyle,
     ),
-    Text(
-      'Reportes',
-      style: optionStyle,
-    ),
+    SpendingPage(),
     Text(
       'Inicio',
       style: optionStyle,

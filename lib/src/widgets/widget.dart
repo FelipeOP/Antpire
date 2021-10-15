@@ -13,7 +13,7 @@ class ReturnButton extends StatelessWidget {
       focusColor: Colors.red[800],
       autofocus: true,
       onPressed: () {
-        Get.to(() => StartPage());
+        Get.to(() => const StartPage());
       },
     );
   }

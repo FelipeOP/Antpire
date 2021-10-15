@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/start_page.dart';
@@ -15,15 +13,19 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final List _cities = ["Semanal", "Quincenal", "Mensual"];
+
   final _formKey = GlobalKey<FormState>();
   final _authController = Get.find<AuthController>();
   final TextEditingController _namesController = TextEditingController();
   final TextEditingController _surnamesController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _salaryController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  static final RegExp _lettersExp = RegExp(r'^[a-zA-Z]+$');
+  static final RegExp _lettersExp =
+      RegExp(r"^[\p{L} ]+$", caseSensitive: false, unicode: true, dotAll: true);
   static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
 
   @override
@@ -59,6 +61,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   _age(),
                   const Divider(),
                   _email(),
+                  const Divider(),
+                  _salary(),
                   const Divider(),
                   _inputPassword(),
                   const Divider(),
@@ -187,7 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
           }
           if (_numbersExp.hasMatch(age.toString())) {
             int newAge = int.parse(age.toString());
-            if (!((newAge > 18) && (newAge < 100))) {
+            if (!((newAge >= 18) && (newAge < 100))) {
               return "Digite una edad valida";
             }
           } else {
@@ -224,6 +228,43 @@ class _RegisterPageState extends State<RegisterPage> {
           return EmailValidator.validate(email.toString())
               ? null
               : "Ingrese un e-mail válido";
+        });
+  }
+
+  Widget _salary() {
+    return TextFormField(
+        controller: _salaryController,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        keyboardType: TextInputType.number,
+        textCapitalization: TextCapitalization.sentences,
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.all(15),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          hintText: 'Ingrese la suma de su sueldo',
+          labelStyle: TextStyle(color: Colors.grey),
+          labelText: 'Sueldo: ',
+          suffixIcon: Icon(Icons.attach_money, color: Colors.red),
+          focusColor: Colors.red,
+          fillColor: Colors.grey,
+          hoverColor: Colors.grey,
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.red, width: 3.0),
+              borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        ),
+        cursorColor: Colors.grey,
+        validator: (String? salary) {
+          if (salary.toString().isEmpty) {
+            return "El campo no puede estar vacío";
+          }
+          if (_numbersExp.hasMatch(salary.toString())) {
+            int finalSalary = int.parse(salary.toString());
+            if (!((finalSalary >= 0))) {
+              return "Ingrese un sueldo válido";
+            }
+          } else {
+            return "Solo debe contener numeros";
+          }
         });
   }
 
@@ -311,15 +352,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            String _id = '';
-            String _names = _namesController.text.trim();
-            String _surnames = _surnamesController.text.trim();
-            int _age = int.parse(_ageController.text.trim());
-            String _email = _emailController.text.trim();
-            String _password = _passwordController.text.trim();
-            Person person =
-                Person(_id, _names, _surnames, _email, _password, _age, 0, 'a');
-            _authController.signUp(_names, _email, _password, person);
+            Person _person = __getUserData();
+            _authController.signUp(_person);
             // _authController.addUserInformation(person);
           }
         },
@@ -334,5 +368,19 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundImage: AssetImage('images/icon.png'),
       backgroundColor: Colors.white,
     );
+  }
+
+  Person __getUserData() {
+    String _id = '';
+    String _names = _namesController.text.trim();
+    String _surnames = _surnamesController.text.trim();
+    int _age = int.parse(_ageController.text.trim());
+    String _email = _emailController.text.trim();
+    double _salary = double.parse(_salaryController.text.trim());
+    String _password = _passwordController.text.trim();
+
+    Person person = Person(
+        _id, _names, _surnames, _email, _password, _age, _salary, 'Mensual');
+    return person;
   }
 }

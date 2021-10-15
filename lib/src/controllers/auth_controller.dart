@@ -1,6 +1,5 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 import 'package:antpire/src/models/person.dart';
-import 'package:antpire/src/pages/home.dart';
 import 'package:antpire/src/pages/root.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,13 +24,14 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  void signUp(String name, String email, String password, Person person) async {
+  void signUp(Person person) async {
     try {
       await auth
-          .createUserWithEmailAndPassword(email: email, password: password)
+          .createUserWithEmailAndPassword(
+              email: person.email, password: person.password)
           .then((value) {
-        displayName = name;
-        auth.currentUser!.updateDisplayName(name);
+        displayName = person.names;
+        auth.currentUser!.updateDisplayName(person.names);
       });
       update();
       addUserInformation(person);
@@ -157,9 +157,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> addUserInformation(Person person) async {
+    person.id = auth.currentUser!.uid;
     try {
       await _firestore
           .collection('users')
+          .doc(auth.currentUser!.uid.toString())
+          .collection("user-data")
           .doc(auth.currentUser!.uid.toString())
           .set(person.toMap());
     } catch (e) {
@@ -170,7 +173,5 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> addFinalcialInformation() async {
-    //TODO
-  }
+  Future<void> addFinalcialInformation() async {}
 }

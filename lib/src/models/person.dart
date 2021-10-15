@@ -1,35 +1,27 @@
 // ignore_for_file: unnecessary_getters_setters
 
 class Person {
-  String _id = '';
-  String _names = '';
-  String _surnames = '';
-  String _email = '';
-  String _password = '';
-  int _age = 0;
-  double _salary = 0.0;
-  String _frecuency = '';
+  late final String _id;
+  late final String _names;
+  late final String _surnames;
+  late final String _email;
+  late final String _password;
+  late final int _age;
+  late final double _salary;
+  late final String _frecuency;
 
   Person(this._id, this._names, this._surnames, this._email, this._password,
       this._age, this._salary, this._frecuency);
 
-  Person.map(dynamic obj) {
-    this._names = obj['names'];
-    this._surnames = obj['surnames'];
-    this._email = obj['email'];
-    this._password = obj['password'];
-    this._age = obj['age'];
-    this._salary = obj['salary'];
-    this._frecuency = obj['frecuency'];
-  }
-
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
+      "id:": id,
       "names": names,
       "surnames": surnames,
       "age": age,
       "email": email,
-      "password": password,
+      "salary": salary,
+      "frecuency": frecuency
     };
     return map;
   }
@@ -74,15 +66,4 @@ class Person {
   int get age => _age;
   double get salary => _salary;
   String get frecuency => _frecuency;
-
-  // Person.fromSnapShot(Snapshot snapshot) {
-  //   _id = snapshot.key!;
-  //   _names = snapshot.value['names'];
-  //   _surnames = snapshot.value['surnames'];
-  //   _email = snapshot.value['email'];
-  //   _password = snapshot.value['password'];
-  //   _age = snapshot.value['age'];
-  //   _salary = snapshot.value['salary'];
-  //   _frecuency = snapshot.value['frecuency'];
-  // }
 }
