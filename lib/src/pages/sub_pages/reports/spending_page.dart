@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'history_expenses.dart';
 
 class SpendingPage extends StatelessWidget {
   const SpendingPage({Key? key}) : super(key: key);
@@ -31,7 +33,9 @@ class SpendingPage extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(50)))),
               icon: const Icon(Icons.arrow_right),
               label: const Text('Historial de gastos'),
-              onPressed: () {}),
+              onPressed: () {
+                Get.to(() => DataTableDemo());
+              }),
         ),
         Padding(
           padding: const EdgeInsets.all(5.0),

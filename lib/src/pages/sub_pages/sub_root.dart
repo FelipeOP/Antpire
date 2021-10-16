@@ -1,16 +1,19 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
-import 'package:antpire/src/pages/sub_pages/spending_page.dart';
-import 'package:antpire/src/pages/sub_pages/user_account.dart';
+import 'package:antpire/src/pages/sub_pages/account/user_account.dart';
+import 'package:antpire/src/pages/sub_pages/home/home.dart';
+import 'package:antpire/src/pages/sub_pages/expenses/register_expenses_page.dart';
+import 'package:antpire/src/pages/sub_pages/reports/spending_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class SubRoot extends StatefulWidget {
+  const SubRoot({Key? key}) : super(key: key);
+
   @override
-  State<Home> createState() => _HomeState();
+  _SubRootState createState() => _SubRootState();
 }
 
-class _HomeState extends State<Home> {
+class _SubRootState extends State<SubRoot> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -38,15 +41,9 @@ class _HomeState extends State<Home> {
   ];
 
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Gastos',
-      style: optionStyle,
-    ),
+    RegisterExpensesPage(),
     SpendingPage(),
-    Text(
-      'Inicio',
-      style: optionStyle,
-    ),
+    Home(),
     Text(
       'Notificaciones',
       style: optionStyle,

@@ -1,5 +1,4 @@
 import 'package:antpire/controller_bindings.dart';
-import 'package:antpire/src/pages/sub_pages/spending_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';

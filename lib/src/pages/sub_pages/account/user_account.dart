@@ -1,5 +1,6 @@
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class UserAccount extends StatefulWidget {
@@ -14,6 +15,8 @@ class _UserAccountState extends State<UserAccount> {
   final _authController = Get.find<AuthController>();
 
   static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
+  static final RegExp _lettersExp =
+      RegExp(r"^[\p{L} ]+$", caseSensitive: false, unicode: true, dotAll: true);
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +25,7 @@ class _UserAccountState extends State<UserAccount> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Divider(
-            color: Colors.white,
-          ),
-          //_textTitle(),
-          const Divider(
-            color: Colors.white,
-          ),
-          _antpireLogo(),
-          const Divider(
-            color: Colors.white,
-          ),
-          _fullName(),
+          _formUsuario(),
           const Divider(),
           const Divider(),
           _salary(),
@@ -57,12 +49,6 @@ class _UserAccountState extends State<UserAccount> {
           fontWeight: FontWeight.bold),
     );
   } */
-
-  Widget _fullName() {
-    return Text(
-      "Nombre:  ${_authController.displayName.toString()}",
-    );
-  }
 
   Widget _salary() {
     return TextFormField(
@@ -98,6 +84,53 @@ class _UserAccountState extends State<UserAccount> {
             return "Solo debe contener numeros";
           }
         });
+  }
+
+  Widget _formUsuario() {
+    return CupertinoPageScaffold(
+      child: Center(
+        child: Form(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onChanged: () {},
+          child: CupertinoFormSection.insetGrouped(
+              header: const Text('Datos personles'),
+              children: [
+                CupertinoFormRow(
+                  child: CupertinoTextFormFieldRow(
+                    textAlign: TextAlign.end,
+                    initialValue: _authController.auth.currentUser!.displayName,
+                    readOnly: true,
+                    validator: (String? name) {
+                      if (name.toString().isEmpty) {
+                        return 'El campo no puede estar vacío';
+                      }
+                      return _lettersExp.hasMatch(name.toString())
+                          ? null
+                          : "Solo debe contener letras";
+                    },
+                  ),
+                  prefix: const Text('Nombre: '),
+                ),
+                CupertinoFormRow(
+                  child: CupertinoTextFormFieldRow(
+                    textAlign: TextAlign.end,
+                    initialValue: _authController.auth.currentUser!.email,
+                    readOnly: true,
+                    validator: (String? name) {
+                      if (name.toString().isEmpty) {
+                        return 'El campo no puede estar vacío';
+                      }
+                      return _lettersExp.hasMatch(name.toString())
+                          ? null
+                          : "Solo debe contener letras";
+                    },
+                  ),
+                  prefix: const Text('Correo'),
+                )
+              ]),
+        ),
+      ),
+    );
   }
 
   Widget _saveButton() {

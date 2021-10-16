@@ -13,8 +13,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final List _cities = ["Semanal", "Quincenal", "Mensual"];
-
   final _formKey = GlobalKey<FormState>();
   final _authController = Get.find<AuthController>();
   final TextEditingController _namesController = TextEditingController();
@@ -67,6 +65,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   _inputPassword(),
                   const Divider(),
                   _validatePassword(),
+                  const Divider(),
+                  _comboSalary(),
                   const Divider(),
                   _continueButton(),
                 ],
@@ -359,6 +359,38 @@ class _RegisterPageState extends State<RegisterPage> {
         },
         child: const Text('Continuar'),
       ),
+    );
+  }
+
+  String dropdownValue = 'Semanal';
+
+  Widget _comboSalary() {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.black),
+      dropdownColor: Colors.white,
+      focusColor: Colors.red,
+      iconDisabledColor: Colors.black,
+      iconEnabledColor: Colors.redAccent,
+      underline: Container(
+        height: 2,
+        color: Colors.redAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownValue = newValue!;
+        });
+      },
+      items: <String>['Semanal', 'Quincenal', 'Mensual']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 
