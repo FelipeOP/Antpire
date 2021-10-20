@@ -64,49 +64,58 @@ class DataTableDemoState extends State<DataTableDemo> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: DataTable(
+        dataTextStyle: GoogleFonts.josefinSans(color: Colors.black),
+        dataRowColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.white;
+          }
+          return Colors.white;
+        }),
         sortAscending: sort,
         sortColumnIndex: 0,
         columns: [
           DataColumn(
-            label: Text("NAME PRODUCT",
-                style: GoogleFonts.josefinSans(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black)),
-            numeric: false,
-            tooltip: "This is product name",
-            
-            /* onSort: (columnIndex, ascending) {
+              label: Text("Descripción",
+                  style: GoogleFonts.josefinSans(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+              numeric: false,
+              tooltip: "This is product name",
+              onSort: (columnIndex, ascending) {
                 setState(() {
                   sort = !sort;
                 });
                 onSortColum(columnIndex, ascending);
-              }), */
-          ),
+              }),
           DataColumn(
             label: Text(
-              "PRICE",
-              style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
+              "Precio",
+              style: GoogleFonts.josefinSans(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             numeric: true,
             tooltip: "This is the price of the product",
           ),
           DataColumn(
-            
-            label: Text(
-              "PRIORITY",
-              style: TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
-            ),
-            numeric: false,
-            tooltip: "This is the priority of the product",
-            /* onSort: (columnIndex, ascending) {
+              label: Text(
+                "Prioridad",
+                style: GoogleFonts.josefinSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              numeric: false,
+              tooltip: "This is the priority of the product",
+              onSort: (columnIndex, ascending) {
                 setState(() {
                   sort = !sort;
                 });
-                onSortColum(columnIndex, ascending); }*/
-          )
+                onSortColum(columnIndex, ascending);
+              })
         ],
         rows: products
             .map(
@@ -144,9 +153,9 @@ class DataTableDemoState extends State<DataTableDemo> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.red,
       ),
       body: Column(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         verticalDirection: VerticalDirection.down,
         children: <Widget>[
@@ -159,15 +168,27 @@ class DataTableDemoState extends State<DataTableDemo> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  child: Text('SELECTED ${selectedProduct.length}'),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(150, 10),
+                      primary: Colors.red,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50)))),
+                  label: Text('Seleccionar ${selectedProduct.length}'),
+                  icon: const Icon(Icons.select_all_rounded),
                   onPressed: () {},
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  child: Text('DELETE SELECTED'),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(130, 20),
+                      primary: Colors.red,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50)))),
+                  icon: const Icon(Icons.delete_rounded),
+                  label: Text('Eliminar'),
                   onPressed: selectedProduct.isEmpty
                       ? null
                       : () {

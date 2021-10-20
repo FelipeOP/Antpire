@@ -16,35 +16,35 @@ class _StartPageState extends State<StartPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
+          // shrinkWrap: true,
           padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
           children: <Widget>[
-            Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  HomeLogo(),
-                  HomeTitle(),
-                  SizedBox(
-                      height: 60.0,
-                      child: Divider(
-                        color: Colors.black,
-                      )),
-                  TextAntpire(),
-                  Divider(height: 30.0, color: Colors.transparent),
-                  StartButton(),
-                  LoginButton()
-                ])
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              _homeLogo(),
+              _homeTitle(),
+              const SizedBox(
+                  height: 60.0,
+                  child: Divider(
+                    color: Colors.black,
+                  )),
+              _textHome(),
+              const Divider(height: 30.0, color: Colors.transparent),
+              _startButton(),
+              _loginButton()
+            ])
           ]),
     );
   }
-}
 
-class HomeTitle extends StatelessWidget {
-  const HomeTitle({
-    Key? key,
-  }) : super(key: key);
+  CircleAvatar _homeLogo() {
+    return const CircleAvatar(
+      radius: 130.0,
+      backgroundImage: AssetImage('images/home.jpeg'),
+      backgroundColor: Colors.white,
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Text _homeTitle() {
     return const Text(
       'Antpire',
       style: TextStyle(
@@ -54,30 +54,8 @@ class HomeTitle extends StatelessWidget {
           fontWeight: FontWeight.bold),
     );
   }
-}
 
-class HomeLogo extends StatelessWidget {
-  const HomeLogo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const CircleAvatar(
-      radius: 130.0,
-      backgroundImage: AssetImage('images/home.jpeg'),
-      backgroundColor: Colors.white,
-    );
-  }
-}
-
-class TextAntpire extends StatelessWidget {
-  const TextAntpire({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Text _textHome() {
     return const Text(
       '¡Queremos ayudarte con tus finanzas personales!',
       textAlign: TextAlign.center,
@@ -88,20 +66,15 @@ class TextAntpire extends StatelessWidget {
           fontWeight: FontWeight.bold),
     );
   }
-}
 
-class StartButton extends StatelessWidget {
-  const StartButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Padding _startButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: TextButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
           padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 12.5)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -113,21 +86,17 @@ class StartButton extends StatelessWidget {
         },
         child: const Text('Comienza ahora',
             style: TextStyle(
-              color: Colors.white,
-            )),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold)),
       ),
     );
   }
-}
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  TextButton _loginButton() {
     return TextButton(
       style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 12, color: Colors.black),
+        textStyle: const TextStyle(fontSize: 14, color: Colors.black),
       ),
       onPressed: () {
         Get.to(() => const LoginPage());

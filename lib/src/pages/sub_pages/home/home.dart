@@ -13,6 +13,7 @@ class _HomeState extends State<Home> {
     'https://e7.pngegg.com/pngimages/721/1001/png-clipart-money-bag-cartoon-tomorrow-sign-s-cartoon-animation.png',
     'https://c8.alamy.com/compes/b1m3wf/ilustracion-de-dibujos-animados-de-monedas-y-dinero-en-efectivo-b1m3wf.jpg'
   ];
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -30,23 +31,17 @@ class _HomeState extends State<Home> {
                     fit: BoxFit.cover,
                   )),
         ),
-        // CarouselSlider(
-        //   options: CarouselOptions(height: Config.screenHeight! * 0.25),
-        //   items: [1, 2, 3, 4, 5].map((i) {
-        //     return Builder(
-        //       builder: (BuildContext context) {
-        //         return Container(
-        //             // width: MediaQuery.of(context).size.width,
-        //             // margin: EdgeInsets.symmetric(horizontal: 5.0),
-        //             decoration: BoxDecoration(color: Colors.amber),
-        //             child: Text(
-        //               'text $i',
-        //               style: TextStyle(fontSize: 16.0),
-        //             ));
-        //       },
-        //     );
-        //   }).toList(),
-        // )
+        Card(
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () {},
+            child: const SizedBox(
+              width: 300,
+              height: 100,
+              child: Text('A card that can be tapped'),
+            ),
+          ),
+        ),
       ],
     );
   }

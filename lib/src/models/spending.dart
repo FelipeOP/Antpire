@@ -1,27 +1,32 @@
-// ignore_for_file: unnecessary_getters_setters
-
 class Product {
-  late int _productID;
+  late final String _id_spending;
+  late final String _priority;
+  late final String _date;
 
-  int get productID => _productID;
+  Product(this._id_spending, this._priority, this._date);
 
-  set productID(int productID) {
-    _productID = productID;
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "id_spending": id_spending,
+      "priority": priority,
+      "date": date
+    };
+    return map;
   }
 
-  late String _description;
-
-  String get description => _description;
-
-  set description(String description) {
-    _description = description;
+  set id_spending(String id_spending) {
+    _id_spending = id_spending;
   }
 
-  late double _price;
-
-  double get price => _price;
-
-  set price(double price) {
-    _price = price;
+  set priority(String priority) {
+    _priority = priority;
   }
+
+  set date(String date) {
+    _date = date;
+  }
+
+  String get id_spending => _id_spending;
+  String get priority => _priority;
+  String get date => _date;
 }

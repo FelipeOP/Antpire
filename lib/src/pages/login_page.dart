@@ -1,9 +1,11 @@
+import 'package:antpire/config.dart';
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/restore_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sign_button/create_button.dart';
 import 'package:sign_button/sign_button.dart';
 
@@ -22,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
@@ -41,6 +44,9 @@ class _LoginPageState extends State<LoginPage> {
                     _emailField(),
                     _passwordField(),
                     _signInButton(),
+                    SizedBox(
+                      height: (Config.screenHeight! * 0.03).ceilToDouble(),
+                    ),
                     _signInButtonGoogle(),
                     _restoreButton(),
                   ],
@@ -62,26 +68,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  TextButton _restoreButton() {
-    return TextButton(
-        style: TextButton.styleFrom(
-          textStyle: const TextStyle(fontSize: 10, color: Colors.black),
-        ),
-        onPressed: () {
-          Get.to(() => RestorePage());
-        },
-        child: const Text(
-          'Olvidaste tu contraseña?',
-          style: TextStyle(color: Colors.blue),
-        ));
-  }
-
   CircleAvatar _loginImage() {
     return const CircleAvatar(
-      radius: 100.0,
+      radius: 120.0,
       backgroundColor: Colors.white,
       child: CircleAvatar(
-        radius: 98.0,
+        radius: 118.0,
         backgroundImage: AssetImage('images/icon.png'),
         backgroundColor: Colors.white,
       ),
@@ -90,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Text _loginText() {
     return const Text(
-      'Bienvenido!',
+      'Bienvenido',
       style: TextStyle(
           fontSize: 40.0,
           fontFamily: 'JosefinSans',
@@ -163,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
       child: TextButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 10)),
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 12.5)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -173,8 +165,11 @@ class _LoginPageState extends State<LoginPage> {
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           overlayColor: MaterialStateProperty.all<Color>(Colors.red.shade800),
         ),
-        child:
-            const Text('Iniciar sesión', style: TextStyle(color: Colors.white)),
+        child: const Text('Iniciar sesión',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold)),
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             String email = _emailController.text.trim();
@@ -189,9 +184,8 @@ class _LoginPageState extends State<LoginPage> {
 
   SignInButton _signInButtonGoogle() {
     return SignInButton(
-      btnText: 'Iniciar sesión con Google',
-      width: 215,
-      // buttonSize: ButtonSize.large,
+      btnText: 'Continuar con Google',
+      buttonSize: ButtonSize.medium,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: const BorderSide(width: 1, color: Colors.black)),
@@ -200,5 +194,20 @@ class _LoginPageState extends State<LoginPage> {
         _authController.signInWithGoogle();
       },
     );
+  }
+
+  TextButton _restoreButton() {
+    return TextButton(
+        style: TextButton.styleFrom(
+          textStyle: GoogleFonts.josefinSans(
+              fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        onPressed: () {
+          Get.to(() => RestorePage());
+        },
+        child: const Text(
+          'Olvidaste tu contraseña?',
+          style: TextStyle(color: Colors.blue),
+        ));
   }
 }

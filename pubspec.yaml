@@ -46,6 +46,8 @@ dependencies:
   # Get Controller
   get: ^4.3.8
   email_validator: ^2.0.1
+  theme_provider: ^0.5.0
+  awesome_dialog: ^2.1.1
 
 dev_dependencies:
   flutter_test:

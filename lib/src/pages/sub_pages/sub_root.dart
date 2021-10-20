@@ -63,14 +63,14 @@ class _SubRootState extends State<SubRoot> {
       appBar: AppBar(
         toolbarHeight: 50,
         title: _titles.elementAt(_selectedIndex),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[400],
         centerTitle: true,
       ),
       body: Center(
         child: GetBuilder<AuthController>(
           builder: (_authController) {
             return ListView(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               children: [
                 _widgetOptions.elementAt(_selectedIndex),
               ],

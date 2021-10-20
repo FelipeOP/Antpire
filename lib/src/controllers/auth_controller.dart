@@ -99,12 +99,9 @@ class AuthController extends GetxController {
     try {
       googleAccount.value = await _googleSignIn.signIn();
       displayName = googleAccount.value!.displayName!;
-      if (googleAccount.value != null) {
-        isSignedIn.value = true;
-        Get.offAll(() => const Root());
-      }
+      isSignedIn.value = true;
       update(); // <-- without this the isSignedin value is not updated.
-
+      Get.offAll(() => const Root());
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),
           snackPosition: SnackPosition.BOTTOM,
@@ -157,13 +154,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> addUserInformation(Person person) async {
-    person.id = auth.currentUser!.uid;
     try {
       await _firestore
           .collection('users')
           .doc(auth.currentUser!.uid.toString())
-          .collection("user-data")
-          .doc(auth.currentUser!.uid.toString())
+          .collection('data')
+          .doc('private')
           .set(person.toMap());
     } catch (e) {
       Get.snackbar('Error occured!', e.toString(),

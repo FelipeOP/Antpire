@@ -20,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _salaryController = TextEditingController();
+  final TextEditingController _frecuencyController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   static final RegExp _lettersExp =
@@ -97,6 +98,14 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  Widget _antpireLogo() {
+    return const CircleAvatar(
+      radius: 120.0,
+      backgroundImage: AssetImage('images/icon.png'),
+      backgroundColor: Colors.white,
+    );
+  }
+
   Widget _inputName() {
     return TextFormField(
         controller: _namesController,
@@ -108,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su(s) nombre(s)',
-          labelText: 'Nombre: ',
+          labelText: 'Nombres',
           labelStyle: TextStyle(color: Colors.grey),
           suffixIcon: Icon(Icons.accessibility, color: Colors.red),
           focusColor: Colors.red,
@@ -122,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
         cursorColor: Colors.grey,
         validator: (String? name) {
           if (name.toString().isEmpty) {
-            return 'El campo no puede estar vacío';
+            return 'El campo nombre no puede estar vacío';
           }
           return _lettersExp.hasMatch(name.toString())
               ? null
@@ -142,7 +151,7 @@ class _RegisterPageState extends State<RegisterPage> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su(s) apellido(s)',
           labelStyle: TextStyle(color: Colors.grey),
-          labelText: 'Apellidos: ',
+          labelText: 'Apellidos',
           suffixIcon: Icon(Icons.contact_support, color: Colors.red),
           focusColor: Colors.red,
           fillColor: Colors.grey,
@@ -154,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
         cursorColor: Colors.grey,
         validator: (String? surnames) {
           if (surnames.toString().isEmpty) {
-            return 'El campo no puede estar vacío';
+            return 'El campo apellido no puede estar vacío';
           }
           return _lettersExp.hasMatch(surnames.toString())
               ? null
@@ -175,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese su edad',
           labelStyle: TextStyle(color: Colors.grey),
-          labelText: 'Edad: ',
+          labelText: 'Edad',
           suffixIcon: Icon(Icons.pin, color: Colors.red),
           focusColor: Colors.red,
           fillColor: Colors.grey,
@@ -211,7 +220,7 @@ class _RegisterPageState extends State<RegisterPage> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'user@example.com',
           labelStyle: TextStyle(color: Colors.grey),
-          labelText: 'Email: ',
+          labelText: 'Email ',
           suffixIcon: Icon(Icons.alternate_email, color: Colors.red),
           focusColor: Colors.red,
           fillColor: Colors.grey,
@@ -223,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
         cursorColor: Colors.grey,
         validator: (String? email) {
           if (email.toString().isEmpty) {
-            return 'El campo no puede estar vacío';
+            return 'El campo correo electrónico no puede estar vacío';
           }
           return EmailValidator.validate(email.toString())
               ? null
@@ -243,7 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
               borderRadius: BorderRadius.all(Radius.circular(20.0))),
           hintText: 'Ingrese la suma de su sueldo',
           labelStyle: TextStyle(color: Colors.grey),
-          labelText: 'Sueldo: ',
+          labelText: 'Sueldo',
           suffixIcon: Icon(Icons.attach_money, color: Colors.red),
           focusColor: Colors.red,
           fillColor: Colors.grey,
@@ -255,7 +264,7 @@ class _RegisterPageState extends State<RegisterPage> {
         cursorColor: Colors.grey,
         validator: (String? salary) {
           if (salary.toString().isEmpty) {
-            return "El campo no puede estar vacío";
+            return "El campo salario no puede estar vacío";
           }
           if (_numbersExp.hasMatch(salary.toString())) {
             int finalSalary = int.parse(salary.toString());
@@ -290,9 +299,9 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
       cursorColor: Colors.grey,
-      validator: (String? password) {
-        return password.toString().isEmpty
-            ? "El campo no puede estar vacío."
+      validator: (String? _password) {
+        return _password.toString().isEmpty
+            ? "El campo contraseña no puede estar vacío."
             : null;
       },
     );
@@ -319,19 +328,59 @@ class _RegisterPageState extends State<RegisterPage> {
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
       ),
       cursorColor: Colors.grey,
-      validator: (String? password) {
-        if (password.toString().isEmpty) {
-          return 'El campo no puede estar vacío';
+      validator: (String? _password) {
+        if (_password.toString().isEmpty) {
+          return 'El campo contraseña no puede estar vacío';
         }
-        return verifyPassword(password!)
+        return __verifyPassword(_password!)
             ? null
             : "Las contraseñas deben coincidir";
       },
     );
   }
 
-  bool verifyPassword(String password) {
-    return _passwordController.text.compareTo(password) == 0;
+  bool __verifyPassword(String _password) {
+    return _passwordController.text.compareTo(_password) == 0;
+  }
+
+  Widget _comboSalary() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      readOnly: true,
+      controller: _frecuencyController,
+      decoration: InputDecoration(
+        labelText: "Frecuencia de pago",
+        labelStyle: const TextStyle(color: Colors.grey),
+        contentPadding: const EdgeInsets.all(15),
+        focusColor: Colors.red,
+        fillColor: Colors.grey,
+        hoverColor: Colors.grey,
+        focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 3.0),
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        border: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1.0),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        suffixIcon: PopupMenuButton<String>(
+          icon: const Icon(Icons.arrow_downward, color: Colors.red),
+          iconSize: 24,
+          onSelected: (String value) {
+            _frecuencyController.text = value;
+          },
+          itemBuilder: (BuildContext context) {
+            return <String>['Semanal', 'Quincenal', 'Mensual']
+                .map<PopupMenuItem<String>>((String value) {
+              return PopupMenuItem(child: Text(value), value: value);
+            }).toList();
+          },
+        ),
+      ),
+      validator: (String? frecuency) {
+        return frecuency.toString().isEmpty
+            ? "El campo no puede estar vacío."
+            : null;
+      },
+    );
   }
 
   Widget _continueButton() {
@@ -340,7 +389,7 @@ class _RegisterPageState extends State<RegisterPage> {
       child: TextButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 15)),
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 12.5)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -354,65 +403,24 @@ class _RegisterPageState extends State<RegisterPage> {
           if (_formKey.currentState!.validate()) {
             Person _person = __getUserData();
             _authController.signUp(_person);
-            // _authController.addUserInformation(person);
           }
         },
-        child: const Text('Continuar'),
+        child: const Text('Continuar',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
       ),
-    );
-  }
-
-  String dropdownValue = 'Semanal';
-
-  Widget _comboSalary() {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.black),
-      dropdownColor: Colors.white,
-      focusColor: Colors.red,
-      iconDisabledColor: Colors.black,
-      iconEnabledColor: Colors.redAccent,
-      underline: Container(
-        height: 2,
-        color: Colors.redAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['Semanal', 'Quincenal', 'Mensual']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _antpireLogo() {
-    return const CircleAvatar(
-      radius: 120.0,
-      backgroundImage: AssetImage('images/icon.png'),
-      backgroundColor: Colors.white,
     );
   }
 
   Person __getUserData() {
-    String _id = '';
     String _names = _namesController.text.trim();
     String _surnames = _surnamesController.text.trim();
     int _age = int.parse(_ageController.text.trim());
     String _email = _emailController.text.trim();
     double _salary = double.parse(_salaryController.text.trim());
     String _password = _passwordController.text.trim();
-
-    Person person = Person(
-        _id, _names, _surnames, _email, _password, _age, _salary, 'Mensual');
+    String _frecuency = _frecuencyController.text.trim();
+    Person person =
+        Person(_names, _surnames, _email, _password, _age, _salary, _frecuency);
     return person;
   }
 }

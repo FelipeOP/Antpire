@@ -32,7 +32,8 @@ class SpendingPage extends StatelessWidget {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(50)))),
               icon: const Icon(Icons.arrow_right),
-              label: const Text('Historial de gastos'),
+              label: const Text('Historial de gastos',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               onPressed: () {
                 Get.to(() => DataTableDemo());
               }),
@@ -46,7 +47,8 @@ class SpendingPage extends StatelessWidget {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(50)))),
               icon: const Icon(Icons.arrow_right),
-              label: const Text('Reporte de gastos'),
+              label: const Text('Reporte de gastos',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               onPressed: () {}),
         ),
         Padding(
@@ -58,7 +60,8 @@ class SpendingPage extends StatelessWidget {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(50)))),
               icon: const Icon(Icons.arrow_right),
-              label: const Text('Balances'),
+              label: const Text('Balances',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               onPressed: () {}),
         ),
       ],
