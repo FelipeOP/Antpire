@@ -1,3 +1,4 @@
+import 'package:antpire/config.dart';
 import 'package:antpire/src/pages/login_page.dart';
 import 'package:antpire/src/pages/register_page.dart';
 import 'package:flutter/material.dart';
@@ -13,33 +14,30 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-          // shrinkWrap: true,
-          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-          children: <Widget>[
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              _homeLogo(),
-              _homeTitle(),
-              const SizedBox(
-                  height: 60.0,
-                  child: Divider(
-                    color: Colors.black,
-                  )),
-              _textHome(),
-              const Divider(height: 30.0, color: Colors.transparent),
-              _startButton(),
-              _loginButton()
-            ])
-          ]),
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        _homeLogo(),
+        _homeTitle(),
+        SizedBox(
+            height: 60.0,
+            width: Config.screenWidth! * 0.90,
+            child: const Divider(
+              color: Colors.black,
+            )),
+        _textHome(),
+        const Divider(height: 30.0, color: Colors.transparent),
+        _startButton(),
+        _loginButton()
+      ]),
     );
   }
 
   CircleAvatar _homeLogo() {
-    return const CircleAvatar(
-      radius: 130.0,
-      backgroundImage: AssetImage('images/home.jpeg'),
+    return CircleAvatar(
+      radius: Config.screenHeight! * 0.23,
+      backgroundImage: const AssetImage('images/home.jpeg'),
       backgroundColor: Colors.white,
     );
   }
@@ -87,7 +85,7 @@ class _StartPageState extends State<StartPage> {
         child: const Text('Comienza ahora',
             style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.bold)),
       ),
     );
@@ -104,6 +102,7 @@ class _StartPageState extends State<StartPage> {
       child: const Text('Ya tengo una cuenta',
           style: TextStyle(
             color: Colors.black,
+            fontWeight: FontWeight.w500,
           )),
     );
   }

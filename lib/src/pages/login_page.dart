@@ -26,57 +26,51 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Config().init(context);
     return SafeArea(
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          body: ListView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30.0,
-              vertical: 50.0,
-            ),
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _loginImage(),
-                    _loginText(),
-                    _emailField(),
-                    _passwordField(),
-                    _signInButton(),
-                    SizedBox(
-                      height: (Config.screenHeight! * 0.03).ceilToDouble(),
-                    ),
-                    _signInButtonGoogle(),
-                    _restoreButton(),
-                  ],
-                ),
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
+            body: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (!Config.isKeyboardOn!) _loginImage(),
+                  _loginText(),
+                  Column(
+                    children: [
+                      _emailField(),
+                      _passwordField(),
+                      _signInButton(),
+                    ],
+                  ),
+                  _signInButtonGoogle(),
+                  _restoreButton(),
+                ],
               ),
-            ],
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-          floatingActionButton: FloatingActionButton(
-            mini: true,
-            child: const Icon(Icons.arrow_back),
-            backgroundColor: Colors.red[800],
-            focusColor: Colors.red[800],
-            autofocus: true,
-            onPressed: () {
-              Get.to(() => const StartPage());
-            },
-          )),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+            floatingActionButton: FloatingActionButton(
+              mini: true,
+              child: const Icon(Icons.arrow_back),
+              backgroundColor: Colors.red[800],
+              focusColor: Colors.red[800],
+              autofocus: true,
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+                Get.to(() => const StartPage());
+              },
+            )),
+      ),
     );
   }
 
-  CircleAvatar _loginImage() {
-    return const CircleAvatar(
-      radius: 120.0,
-      backgroundColor: Colors.white,
-      child: CircleAvatar(
-        radius: 118.0,
-        backgroundImage: AssetImage('images/icon.png'),
-        backgroundColor: Colors.white,
-      ),
+  Widget _loginImage() {
+    return Image(
+      image: const AssetImage('images/login.png'),
+      width: Config.screenWidth! * 0.75,
+      height: Config.screenHeight! * 0.38,
     );
   }
 
@@ -92,13 +86,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding _emailField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
       child: TextFormField(
           controller: _emailController,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType: TextInputType.emailAddress,
           decoration: const InputDecoration(
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             labelStyle: TextStyle(color: Colors.grey),
             hintText: 'Correo electrónico',
             labelText: 'Correo',
@@ -125,27 +119,32 @@ class _LoginPageState extends State<LoginPage> {
 
   Padding _passwordField() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
       child: TextFormField(
-        controller: _passwordController,
-        enableInteractiveSelection: true,
-        obscureText: true,
-        decoration: const InputDecoration(
-          contentPadding: EdgeInsets.all(15),
-          labelStyle: TextStyle(color: Colors.grey),
-          hintText: 'Constraseña',
-          labelText: 'Constraseña',
-          suffixIcon: Icon(Icons.lock, color: Colors.red),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-          focusColor: Colors.red,
-          fillColor: Colors.red,
-          hoverColor: Colors.red,
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.red, width: 3.0),
-              borderRadius: BorderRadius.all(Radius.circular(20))),
-        ),
-      ),
+          controller: _passwordController,
+          enableInteractiveSelection: true,
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          decoration: const InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            labelStyle: TextStyle(color: Colors.grey),
+            hintText: 'Constraseña',
+            labelText: 'Constraseña',
+            suffixIcon: Icon(Icons.lock, color: Colors.red),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            focusColor: Colors.red,
+            fillColor: Colors.red,
+            hoverColor: Colors.red,
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.red, width: 3.0),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+          ),
+          validator: (String? password) {
+            if (password.toString().isEmpty) {
+              return 'El campo no puede estar vacío';
+            }
+          }),
     );
   }
 

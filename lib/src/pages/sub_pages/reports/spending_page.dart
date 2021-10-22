@@ -1,3 +1,4 @@
+import 'package:antpire/config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,13 +9,14 @@ class SpendingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CircleAvatar(
-          radius: 130.0,
-          backgroundImage: AssetImage('images/home.jpeg'),
-          backgroundColor: Colors.white,
+        Image(
+          image: const AssetImage('images/engineer.jpeg'),
+          width: Config.screenWidth! * 0.75,
+          height: Config.screenHeight! * 0.40,
         ),
         Padding(
           padding: const EdgeInsets.all(10.0),

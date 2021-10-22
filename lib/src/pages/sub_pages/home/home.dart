@@ -10,38 +10,53 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final images = [
-    'https://e7.pngegg.com/pngimages/721/1001/png-clipart-money-bag-cartoon-tomorrow-sign-s-cartoon-animation.png',
-    'https://c8.alamy.com/compes/b1m3wf/ilustracion-de-dibujos-animados-de-monedas-y-dinero-en-efectivo-b1m3wf.jpg'
+    'images/home/banner.jpg',
+    'images/home/learn.jpg',
+    'images/home/piggy.jpg',
+    'images/home/piggybank.jpg',
+    'images/home/plant.jpg',
+    'images/home/what.jpg',
   ];
 
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.all(15),
       children: [
         CarouselSlider.builder(
-          options: CarouselOptions(height: Config.screenHeight! * 0.25),
+          options: CarouselOptions(
+              autoPlay: true,
+              height: Config.screenHeight! * 0.25,
+              viewportFraction: 1),
           itemCount: images.length,
           itemBuilder: (BuildContext context, int index, int pageIndex) =>
-              Container(
-                  margin: EdgeInsets.all(1),
-                  color: Colors.grey[300],
-                  child: Image.network(
-                    images[index],
-                    fit: BoxFit.cover,
-                  )),
-        ),
-        Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {},
-            child: const SizedBox(
-              width: 300,
-              height: 100,
-              child: Text('A card that can be tapped'),
-            ),
+              SizedBox(
+            width: Config.screenWidth! - 1,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image(
+                  image: AssetImage(images[index]),
+                  fit: BoxFit.cover,
+                )),
           ),
         ),
+        StreamBuilder<Object>(
+            stream: null,
+            builder: (context, snapshot) {
+              return Card(
+                elevation: 5,
+                child: InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
+                  onTap: () {},
+                  child: const SizedBox(
+                    width: 300,
+                    height: 100,
+                    child: Text('A card that can be tapped'),
+                  ),
+                ),
+              );
+            })
       ],
     );
   }

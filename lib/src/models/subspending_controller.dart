@@ -1,21 +1,23 @@
-class Sub_spending {
-  late final String _id_sub_spending;
+// ignore_for_file: unnecessary_getters_setters
+
+class SubSpending {
+  late final String _subSpendingID;
   late final String _date;
   late final String _description;
 
-  Sub_spending(this._id_sub_spending, this._date, this._description);
+  SubSpending(this._subSpendingID, this._date, this._description);
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
-      "id_sub_spending": id_sub_spending,
+      "subSpendingID": _subSpendingID,
       "date": date,
       "description": description
     };
     return map;
   }
 
-  set id_sub_spending(String id_sub_spending) {
-    _id_sub_spending = id_sub_spending;
+  set subSpendingID(String subSpendingID) {
+    _subSpendingID = subSpendingID;
   }
 
   set date(String date) {
@@ -26,7 +28,7 @@ class Sub_spending {
     _description = description;
   }
 
-  String get id_sub_spending => _id_sub_spending;
+  String get subSpendingID => _subSpendingID;
   String get date => _date;
   String get description => _description;
 }

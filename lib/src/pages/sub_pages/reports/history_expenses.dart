@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_const_constructors
-
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:antpire/src/pages/sub_pages/reports/product_prov.dart';
 
 class DataTableDemo extends StatefulWidget {

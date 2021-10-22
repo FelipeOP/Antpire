@@ -1,4 +1,4 @@
-import 'package:antpire/src/pages/sub_pages/home/home.dart';
+import 'package:antpire/config.dart';
 import 'package:antpire/src/pages/login_page.dart';
 import 'package:antpire/src/pages/sub_pages/sub_root.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,9 @@ class Root extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Config().init(context);
+    Config().init(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: GetBuilder<AuthController>(
         builder: (_) {

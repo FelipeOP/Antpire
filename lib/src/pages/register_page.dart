@@ -1,3 +1,4 @@
+import 'package:antpire/config.dart';
 import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/start_page.dart';
@@ -29,68 +30,75 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: ListView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 30.0,
-            vertical: 50.0,
-          ),
-          children: <Widget>[
-            Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Divider(
-                    color: Colors.white,
-                  ),
-                  _textTitle(),
-                  const Divider(
-                    color: Colors.white,
-                  ),
-                  _antpireLogo(),
-                  const Divider(
-                    color: Colors.white,
-                  ),
-                  _inputName(),
-                  const Divider(),
-                  _inputLastName(),
-                  const Divider(),
-                  _age(),
-                  const Divider(),
-                  _email(),
-                  const Divider(),
-                  _salary(),
-                  const Divider(),
-                  _inputPassword(),
-                  const Divider(),
-                  _validatePassword(),
-                  const Divider(),
-                  _comboSalary(),
-                  const Divider(),
-                  _continueButton(),
-                ],
+    Config().init(context);
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ListView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30.0,
+                vertical: 50.0,
               ),
+              children: <Widget>[
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Divider(
+                        color: Colors.white,
+                      ),
+                      _textTitle(),
+                      const Divider(
+                        color: Colors.white,
+                      ),
+                      _registerImage(),
+                      const Divider(
+                        color: Colors.white,
+                      ),
+                      _inputName(),
+                      const Divider(),
+                      _inputLastName(),
+                      const Divider(),
+                      _age(),
+                      const Divider(),
+                      _email(),
+                      const Divider(),
+                      _salary(),
+                      const Divider(),
+                      _inputPassword(),
+                      const Divider(),
+                      _validatePassword(),
+                      const Divider(),
+                      _comboSalary(),
+                      const Divider(),
+                      _continueButton(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-        floatingActionButton: FloatingActionButton(
-          mini: true,
-          child: const Icon(Icons.arrow_back),
-          backgroundColor: Colors.red[800],
-          focusColor: Colors.red[800],
-          autofocus: true,
-          onPressed: () {
-            Get.to(() => const StartPage());
-          },
-        ));
+            floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
+            floatingActionButton: FloatingActionButton(
+              mini: true,
+              child: const Icon(Icons.arrow_back),
+              backgroundColor: Colors.red[800],
+              focusColor: Colors.red[800],
+              autofocus: true,
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+                Get.to(() => const StartPage());
+              },
+            )),
+      ),
+    );
   }
 
   Widget _textTitle() {
     return const Text(
-      'Bienvenido!',
+      'Empecemos!',
       style: TextStyle(
           fontSize: 45.0,
           fontFamily: 'JosefinSans',
@@ -98,11 +106,11 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _antpireLogo() {
-    return const CircleAvatar(
-      radius: 120.0,
-      backgroundImage: AssetImage('images/icon.png'),
-      backgroundColor: Colors.white,
+  Widget _registerImage() {
+    return Image(
+      image: const AssetImage('images/3boss.jpeg'),
+      width: Config.screenWidth! * 0.75,
+      height: Config.screenHeight! * 0.40,
     );
   }
 

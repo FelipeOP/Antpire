@@ -46,10 +46,11 @@ class _UserAccountState extends State<UserAccount> {
     return Form(
       key: _formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           _userInfo(),
           _financialInfo(),
-          SizedBox(width: 100, height: Config.screenHeight! * 0.09),
+          // SizedBox(width: 100, height: Config.screenHeight! * 0.09),
           _signOut(),
         ],
       ),
@@ -114,11 +115,13 @@ class _UserAccountState extends State<UserAccount> {
               readOnly: _readOnly,
               textAlign: TextAlign.end,
               onTap: () {
+                if (!mounted) return;
                 setState(() {
                   _readOnly = !_readOnly;
                 });
               },
               onChanged: (String? value) {
+                if (!mounted) return;
                 setState(() {
                   _wasChanged = true;
                 });
@@ -163,6 +166,7 @@ class _UserAccountState extends State<UserAccount> {
         onPressed: _wasChanged
             ? () {
                 if (_formKey.currentState!.validate()) {
+                  if (!mounted) return;
                   Get.snackbar(
                     "Valor actualizado",
                     "Se han guardado los cambios correctamente.",

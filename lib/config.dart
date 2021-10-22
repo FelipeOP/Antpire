@@ -9,11 +9,13 @@ class Config {
   static double? screenWidth;
   static double? screenHeight;
   static Orientation? orientation;
+  static bool? isKeyboardOn;
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData!.size.width;
     screenHeight = _mediaQueryData!.size.height;
     orientation = _mediaQueryData!.orientation;
+    isKeyboardOn = _mediaQueryData!.viewInsets.bottom != 0;
   }
 }

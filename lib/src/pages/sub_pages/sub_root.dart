@@ -2,9 +2,9 @@ import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/sub_pages/account/user_account.dart';
 import 'package:antpire/src/pages/sub_pages/home/home.dart';
 import 'package:antpire/src/pages/sub_pages/expenses/register_expenses_page.dart';
+import 'package:antpire/src/pages/sub_pages/notifications/notification.dart';
 import 'package:antpire/src/pages/sub_pages/reports/spending_page.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class SubRoot extends StatefulWidget {
   const SubRoot({Key? key}) : super(key: key);
@@ -44,14 +44,16 @@ class _SubRootState extends State<SubRoot> {
     RegisterExpensesPage(),
     SpendingPage(),
     Home(),
-    Text(
-      'Notificaciones',
-      style: optionStyle,
-    ),
+    Text('Hola'),
     UserAccount()
   ];
 
   void _onItemTapped(int index) {
+    if (index == 3) {
+      final Notifications deiber = Notifications();
+      deiber.init();
+      deiber.showNotification().whenComplete(() => print("ok"));
+    }
     setState(() {
       _selectedIndex = index;
     });
@@ -59,57 +61,52 @@ class _SubRootState extends State<SubRoot> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 50,
-        title: _titles.elementAt(_selectedIndex),
-        backgroundColor: Colors.red[400],
-        centerTitle: true,
-      ),
-      body: Center(
-        child: GetBuilder<AuthController>(
-          builder: (_authController) {
-            return ListView(
-              padding: const EdgeInsets.all(10),
-              children: [
-                _widgetOptions.elementAt(_selectedIndex),
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              toolbarHeight: 50,
+              title: _titles.elementAt(_selectedIndex),
+              backgroundColor: Colors.red[400],
+              centerTitle: true,
+            ),
+            body: _widgetOptions.elementAt(_selectedIndex),
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.local_atm_rounded),
+                  backgroundColor: Colors.red[400],
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.assessment),
+                  backgroundColor: Colors.red[400],
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.home),
+                  backgroundColor: Colors.red[400],
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.notifications),
+                  backgroundColor: Colors.red[400],
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.account_circle),
+                  backgroundColor: Colors.red[400],
+                  label: '',
+                ),
               ],
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.local_atm_rounded),
-            backgroundColor: Colors.red[400],
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.assessment),
-            backgroundColor: Colors.red[400],
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            backgroundColor: Colors.red[400],
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.notifications),
-            backgroundColor: Colors.red[400],
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.account_circle),
-            backgroundColor: Colors.red[400],
-            label: '',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        // fixedColor: Colors.black,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
+              currentIndex: _selectedIndex,
+              // fixedColor: Colors.black,
+              selectedItemColor: Colors.black,
+              onTap: _onItemTapped,
+            )),
       ),
     );
   }

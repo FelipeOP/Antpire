@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RegisterExpensesPage extends StatefulWidget {
   const RegisterExpensesPage({Key? key}) : super(key: key);
@@ -21,6 +20,7 @@ class _RegisterExpensesPageState extends State<RegisterExpensesPage> {
   Widget build(BuildContext context) {
     var _deiber;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
