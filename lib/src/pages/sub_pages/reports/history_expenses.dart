@@ -1,203 +1,171 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
+import 'package:antpire/config.dart';
+import 'package:antpire/src/models/spending.dart';
+import 'package:antpire/src/models/spending_data_source.dart';
+import 'package:antpire/src/pages/sub_pages/expenses/register_expenses_page.dart';
+import 'package:antpire/src/pages/sub_pages/reports/update_expense.dart';
+import 'package:antpire/src/services/firestore.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:antpire/src/pages/sub_pages/reports/product_prov.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class DataTableDemo extends StatefulWidget {
-  DataTableDemo() : super();
-
-  final String title = "Historial de gastos";
+class GridTable extends StatefulWidget {
+  const GridTable({Key? key}) : super(key: key);
 
   @override
-  DataTableDemoState createState() => DataTableDemoState();
+  _GridTableState createState() => _GridTableState();
 }
 
-class DataTableDemoState extends State<DataTableDemo> {
-  late List<Product_prov> products;
-  late List<Product_prov> selectedProduct;
-  late bool sort;
-
+class _GridTableState extends State<GridTable> {
+  late SpendingDataSource _spendingDataSource;
+  late DataGridController _dataGridController;
   @override
   void initState() {
-    sort = false;
-    selectedProduct = [];
-    products = Product_prov.getUsers();
     super.initState();
-  }
-
-  onSortColum(int columnIndex, bool ascending) {
-    if (columnIndex == 0) {
-      if (ascending) {
-        products.sort((a, b) => a.nameProduct.compareTo(b.nameProduct));
-      } else {
-        products.sort((a, b) => b.nameProduct.compareTo(a.nameProduct));
-      }
-    }
-  }
-
-  onSelectedRow(bool selected, Product_prov product) async {
-    setState(() {
-      if (selected) {
-        selectedProduct.add(product);
-      } else {
-        selectedProduct.remove(product);
-      }
-    });
-  }
-
-  deleteSelected() async {
-    setState(() {
-      if (selectedProduct.isNotEmpty) {
-        List<Product_prov> temp = [];
-        temp.addAll(selectedProduct);
-        for (Product_prov product in temp) {
-          products.remove(product);
-          selectedProduct.remove(product);
-        }
-      }
-    });
-  }
-
-  SingleChildScrollView dataBody() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        dataTextStyle: GoogleFonts.josefinSans(color: Colors.black),
-        dataRowColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-          if (states.contains(MaterialState.selected)) {
-            return Colors.white;
-          }
-          return Colors.white;
-        }),
-        sortAscending: sort,
-        sortColumnIndex: 0,
-        columns: [
-          DataColumn(
-              label: Text("Descripción",
-                  style: GoogleFonts.josefinSans(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black)),
-              numeric: false,
-              tooltip: "This is product name",
-              onSort: (columnIndex, ascending) {
-                setState(() {
-                  sort = !sort;
-                });
-                onSortColum(columnIndex, ascending);
-              }),
-          DataColumn(
-            label: Text(
-              "Precio",
-              style: GoogleFonts.josefinSans(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            numeric: true,
-            tooltip: "This is the price of the product",
-          ),
-          DataColumn(
-              label: Text(
-                "Prioridad",
-                style: GoogleFonts.josefinSans(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-              numeric: false,
-              tooltip: "This is the priority of the product",
-              onSort: (columnIndex, ascending) {
-                setState(() {
-                  sort = !sort;
-                });
-                onSortColum(columnIndex, ascending);
-              })
-        ],
-        rows: products
-            .map(
-              (product) => DataRow(
-                  selected: selectedProduct.contains(product),
-                  onSelectChanged: (b) {
-                    print("Onselect");
-                    onSelectedRow(b!, product);
-                  },
-                  cells: [
-                    DataCell(
-                      Text(product.nameProduct),
-                      onTap: () {
-                        print('Selected ${product.nameProduct}');
-                      },
-                    ),
-                    DataCell(
-                      Text(product.price.toString()),
-                    ),
-                    DataCell(
-                      Text(product.priority),
-                      /*  onTap: () {
-                        print('Selected ${product.priority}'); */
-                      // },
-                    ),
-                  ]),
-            )
-            .toList(),
-      ),
-    );
+    _spendingDataSource = SpendingDataSource();
+    _spendingDataSource.refresh();
+    _dataGridController = DataGridController();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.red,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        verticalDirection: VerticalDirection.down,
-        children: <Widget>[
-          Expanded(
-            child: dataBody(),
+    Config().init(context);
+    return SafeArea(
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: const Text('Historial',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+            toolbarHeight: 50,
+            backgroundColor: Colors.red[400],
+            centerTitle: true,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(150, 10),
-                      primary: Colors.red,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)))),
-                  label: Text('Seleccionar ${selectedProduct.length}'),
-                  icon: const Icon(Icons.select_all_rounded),
-                  onPressed: () {},
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(130, 20),
-                      primary: Colors.red,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)))),
-                  icon: const Icon(Icons.delete_rounded),
-                  label: Text('Eliminar'),
-                  onPressed: selectedProduct.isEmpty
-                      ? null
-                      : () {
-                          deleteSelected();
-                        },
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+          body: _buildDataGrid()),
     );
+  }
+
+  Widget _buildDataGrid() {
+    Config().init(context);
+    return StreamBuilder<QuerySnapshot>(
+        stream: _spendingDataSource.getStream(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          _spendingDataSource.buildStream(snapshot);
+          if (snapshot.hasData) {
+            return SfDataGrid(
+              controller: _dataGridController,
+              startSwipeActionsBuilder: startSwipeActions,
+              endSwipeActionsBuilder: endSwipeActions,
+              allowSwiping: true,
+              swipeMaxOffset: 150,
+              source: _spendingDataSource,
+              allowSorting: true,
+              allowPullToRefresh: true,
+              columnWidthMode: ColumnWidthMode.fill,
+              columns: _gridColumns,
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
+  }
+
+  int __spendingIndex(int rowIndex) {
+    int spendingIndex = spendings.indexWhere((spending) =>
+        spending.name ==
+        _spendingDataSource.spendingDataGridRows
+            .elementAt(rowIndex)
+            .getCells()
+            .elementAt(0)
+            .value);
+    return spendingIndex;
+  }
+
+  Future<void> deleteSpending(int rowIndex) async {
+    // Remove table row locally
+    int spendingIndex = __spendingIndex(rowIndex);
+    _spendingDataSource.spendingDataGridRows.removeAt(rowIndex);
+    if (!spendingIndex.isNegative) {
+      Firestore().deleteSpending(spendings.elementAt(spendingIndex));
+      // Remove Spending Object locally
+      spendings.removeAt(spendingIndex);
+      _spendingDataSource.updateDataGridDataSource();
+    }
+  }
+
+  AwesomeDialog editSpendingData(Spending spending) {
+    return AwesomeDialog(
+      // customHeader: CircleAvatar(
+      //     radius: Config.screenHeight! * 0.1,
+      //     backgroundImage: const AssetImage('images/yo.jpeg'),
+      //     backgroundColor: Colors.white),
+      context: context,
+      animType: AnimType.SCALE,
+      dialogType: DialogType.INFO_REVERSED,
+      body: UpdateExpensesPage(spending: spending),
+      showCloseIcon: true,
+      title: 'This is Ignored',
+      desc: 'This is also Ignored',
+    )..show();
+  }
+
+  Widget startSwipeActions(BuildContext context, DataGridRow row, int index) {
+    return GestureDetector(
+        onTap: () {
+          int spendingIndex = __spendingIndex(index);
+          editSpendingData(spendings.elementAt(spendingIndex));
+          _spendingDataSource.updateDataGridDataSource();
+        },
+        child: Container(
+            color: Colors.green,
+            padding: const EdgeInsets.only(left: 30.0),
+            alignment: Alignment.centerLeft,
+            child: const Text('Editar',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold))));
+  }
+
+  Widget endSwipeActions(BuildContext context, DataGridRow row, int index) {
+    return GestureDetector(
+        onTap: () {
+          deleteSpending(index);
+        },
+        child: Container(
+            color: Colors.red,
+            padding: const EdgeInsets.only(left: 30.0),
+            alignment: Alignment.centerLeft,
+            child: const Text('Eliminar',
+                style: TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold))));
+  }
+
+  List<GridColumn> get _gridColumns {
+    return <GridColumn>[
+      GridColumn(
+          columnName: 'name',
+          label: Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              child: const Text('Nombre', overflow: TextOverflow.ellipsis
+                  //style: TextStyle(color: red, fontSize: 20),
+                  ))),
+      GridColumn(
+          columnName: 'price',
+          label: Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              child: const Text('Precio', overflow: TextOverflow.ellipsis
+                  //style: TextStyle(color: red, fontSize: 20),
+                  ))),
+      GridColumn(
+          columnName: 'priority',
+          label: Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              child: const Text('Prioridad', overflow: TextOverflow.ellipsis
+                  //style: TextStyle(color: red, fontSize: 20),
+                  )))
+    ];
   }
 }

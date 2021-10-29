@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:antpire/config.dart';
 import 'package:antpire/src/controllers/auth_controller.dart';
+import 'package:antpire/src/services/firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:intl/intl.dart';
 
 class UserAccount extends StatefulWidget {
   const UserAccount({Key? key}) : super(key: key);
@@ -21,23 +26,29 @@ class _UserAccountState extends State<UserAccount> {
   final _formKey = GlobalKey<FormState>();
   final _authController = Get.find<AuthController>();
 
-  final TextEditingController _salaryController =
-      TextEditingController(text: r'$$$$$$$$');
-  final TextEditingController _frecuencyController =
-      TextEditingController(text: "Firestore");
+  final TextEditingController _salaryController = TextEditingController();
+  final TextEditingController _frequencyController = TextEditingController();
 
-  String? __getCurrentUserName() {
-    if (_authController.auth.currentUser != null) {
-      return _authController.auth.currentUser!.displayName;
-    }
-    return _authController.googleAccount.value!.displayName;
+  late FocusNode salaryFocusNode;
+
+  @override
+  void dispose() {
+    salaryFocusNode.dispose();
+    super.dispose();
   }
 
-  String? __getCurrentUserEmail() {
-    if (_authController.auth.currentUser != null) {
-      return _authController.auth.currentUser!.email;
-    }
-    return _authController.googleAccount.value!.email;
+  @override
+  void initState() {
+    super.initState();
+    salaryFocusNode = FocusNode();
+    Firestore().getUserData().then((value) {
+      _salaryController.text = value!['salary'].toString().isNotEmpty
+          ? value['salary'].toString()
+          : '';
+      _frequencyController.text = value['frequency'].toString().isNotEmpty
+          ? value['frequency'].toString()
+          : '';
+    }).onError((e, stackTrace) => _authController.getErrorMessage(e));
   }
 
   @override
@@ -51,7 +62,10 @@ class _UserAccountState extends State<UserAccount> {
           _userInfo(),
           _financialInfo(),
           // SizedBox(width: 100, height: Config.screenHeight! * 0.09),
-          _signOut(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [_signOut(), _deleteAccount()],
+          )
         ],
       ),
     );
@@ -67,7 +81,7 @@ class _UserAccountState extends State<UserAccount> {
             child: CupertinoTextFormFieldRow(
               style: GoogleFonts.josefinSans(),
               textAlign: TextAlign.end,
-              initialValue: __getCurrentUserName(),
+              initialValue: _authController.displayName,
               readOnly: true,
               // validator: (String? name) {
               //   if (name.toString().isEmpty) {
@@ -85,7 +99,7 @@ class _UserAccountState extends State<UserAccount> {
             child: CupertinoTextFormFieldRow(
               style: GoogleFonts.josefinSans(),
               textAlign: TextAlign.end,
-              initialValue: __getCurrentUserEmail(),
+              initialValue: _authController.userEmail,
               readOnly: true,
               // validator: (String? name) {
               //   if (name.toString().isEmpty) {
@@ -101,38 +115,46 @@ class _UserAccountState extends State<UserAccount> {
   }
 
   bool _wasChanged = false;
-  bool _readOnly = true;
 
   Widget _financialInfo() {
     return CupertinoFormSection.insetGrouped(
         header: const Text('Información financiera'),
         children: [
           CupertinoFormRow(
-            prefix: Text('Sueldo',
+            prefix: Text('Salario',
                 style: GoogleFonts.josefinSans(fontWeight: FontWeight.bold)),
             child: CupertinoTextFormFieldRow(
+              focusNode: salaryFocusNode,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              keyboardType: TextInputType.number,
               controller: _salaryController,
-              readOnly: _readOnly,
+              readOnly: false,
+              style: GoogleFonts.josefinSans(),
               textAlign: TextAlign.end,
-              onTap: () {
-                if (!mounted) return;
-                setState(() {
-                  _readOnly = !_readOnly;
-                });
-              },
               onChanged: (String? value) {
-                if (!mounted) return;
                 setState(() {
                   _wasChanged = true;
                 });
               },
               validator: (String? salary) {
                 if (salary.toString().isEmpty) {
-                  return 'El campo no puede estar vacío';
+                  return "El campo salario no puede estar vacío";
                 }
-                return _lettersExp.hasMatch(salary.toString())
-                    ? null
-                    : "Solo debe contener letras";
+                if (_numbersExp.hasMatch(salary.toString())) {
+                  double finalSalary = double.parse(salary.toString());
+                  if (!((finalSalary >= 50))) {
+                    return "Ingrese un sueldo válido";
+                  }
+                } else {
+                  return "Solo debe contener numeros";
+                }
+                return salaryFocusNode.hasFocus
+                    ? NumberFormat.currency(
+                        locale: 'es_MX',
+                        symbol: r'$ ',
+                        decimalDigits: 0,
+                      ).format(int.parse(salary.toString()))
+                    : null;
               },
             ),
           ),
@@ -140,7 +162,7 @@ class _UserAccountState extends State<UserAccount> {
             prefix: Text('Frecuencia',
                 style: GoogleFonts.josefinSans(fontWeight: FontWeight.bold)),
             child: CupertinoTextFormFieldRow(
-              controller: _frecuencyController,
+              controller: _frequencyController,
               style: GoogleFonts.josefinSans(),
               textAlign: TextAlign.end,
               readOnly: true,
@@ -166,15 +188,24 @@ class _UserAccountState extends State<UserAccount> {
         onPressed: _wasChanged
             ? () {
                 if (_formKey.currentState!.validate()) {
-                  if (!mounted) return;
-                  Get.snackbar(
-                    "Valor actualizado",
-                    "Se han guardado los cambios correctamente.",
-                    backgroundColor: Colors.white,
-                  );
+                  Firestore()
+                      .updateUserData(
+                          frequency: _frequencyController.text,
+                          salary: int.parse(_salaryController.text.trim()))
+                      .then((value) {
+                    if (value.compareTo('updated') == 0) {
+                      Get.snackbar(
+                        'Cambios guardados',
+                        'Se han actualizado los datos correctamente.',
+                        snackPosition: SnackPosition.TOP,
+                      );
+                    }
+                  }, onError: (e) {
+                    _authController.getErrorMessage(e);
+                  });
+
                   setState(() {
                     _wasChanged = false;
-                    _readOnly = true;
                   });
                 }
               }
@@ -184,15 +215,26 @@ class _UserAccountState extends State<UserAccount> {
   }
 
   Widget _signOut() {
-    return ElevatedButton(
+    return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(primary: Colors.grey),
-      child: const Text('Cerrar sesión',
+      icon: const Icon(Icons.exit_to_app),
+      label: const Text('Cerrar sesión',
           style: TextStyle(fontWeight: FontWeight.bold)),
-      onPressed: () => _showMyDialog(),
+      onPressed: () => _signOutDialog(),
     );
   }
 
-  AwesomeDialog _showMyDialog() {
+  Widget _deleteAccount() {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(primary: Colors.red[600]),
+      icon: const Icon(Icons.delete_forever),
+      label: const Text('Eliminar cuenta',
+          style: TextStyle(fontWeight: FontWeight.bold)),
+      onPressed: () => _deleteAccountDialog(),
+    );
+  }
+
+  AwesomeDialog _signOutDialog() {
     return AwesomeDialog(
         context: context,
         dialogType: DialogType.QUESTION,
@@ -206,7 +248,28 @@ class _UserAccountState extends State<UserAccount> {
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         showCloseIcon: true,
         btnCancelOnPress: () => Get.back(),
-        btnOkOnPress: () => _authController.signout())
+        btnOkOnPress: () => _authController.signOut())
+      ..show();
+  }
+
+  AwesomeDialog _deleteAccountDialog() {
+    return AwesomeDialog(
+        context: context,
+        dialogType: DialogType.WARNING,
+        headerAnimationLoop: true,
+        animType: AnimType.SCALE,
+        title: 'Quieres eliminar tu cuenta?',
+        desc:
+            'Esta acción no se puede deshacer.\nDebes re-autentificarte para llevar a cabo este proceso',
+        btnOkText: "Continuar",
+        btnCancelText: "Cancelar",
+        buttonsTextStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        showCloseIcon: true,
+        btnCancelOnPress: () => Get.back(),
+        btnOkOnPress: () {
+          _authController.deleteAccount();
+        })
       ..show();
   }
 
@@ -228,7 +291,7 @@ class _UserAccountState extends State<UserAccount> {
                 scrollController: FixedExtentScrollController(initialItem: 0),
                 onSelectedItemChanged: (index) {
                   setState(() {
-                    _frecuencyController.text = _freq[index].data!;
+                    _frequencyController.text = _freq[index].data!;
                     _wasChanged = true;
                   });
                 },

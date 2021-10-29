@@ -1,4 +1,5 @@
 import 'package:antpire/config.dart';
+import 'package:antpire/src/pages/sub_pages/reports/balance_sheets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,7 +38,7 @@ class SpendingPage extends StatelessWidget {
               label: const Text('Historial de gastos',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               onPressed: () {
-                Get.to(() => DataTableDemo());
+                Get.to(() => const GridTable());
               }),
         ),
         Padding(
@@ -51,7 +52,9 @@ class SpendingPage extends StatelessWidget {
               icon: const Icon(Icons.arrow_right),
               label: const Text('Reporte de gastos',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              onPressed: () {}),
+              onPressed: () {
+                // Firestore().getAllSpendings();
+              }),
         ),
         Padding(
           padding: const EdgeInsets.all(5.0),
@@ -64,7 +67,9 @@ class SpendingPage extends StatelessWidget {
               icon: const Icon(Icons.arrow_right),
               label: const Text('Balances',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              onPressed: () {}),
+              onPressed: () {
+                Get.to(() => const BalanceSheet());
+              }),
         ),
       ],
     );

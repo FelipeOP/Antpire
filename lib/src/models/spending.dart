@@ -1,34 +1,41 @@
 // ignore_for_file: non_constant_identifier_names, unnecessary_getters_setters
 
-class Product {
-  late final String _spendingID;
-  late final String _priority;
-  late final String _date;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Product(this._spendingID, this._priority, this._date);
+class Spending {
+  late final String name;
+  late final int price;
+  late final String priority;
+  late final DocumentReference reference;
 
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = {
-      "spendingID": _spendingID,
-      "priority": priority,
-      "date": date
-    };
-    return map;
+  Spending({required this.name, required this.price, required this.priority});
+
+  Map<String, dynamic> toJson() => _spendingToJson(this);
+
+  factory Spending.fromJson(Map<String, dynamic>? json) =>
+      _spendingeFromJson(json!);
+
+  factory Spending.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    Spending spending = Spending.fromJson(snapshot.data());
+    spending.reference = snapshot.reference;
+    return spending;
   }
+}
 
-  set id_spending(String spendingID) {
-    _spendingID = spendingID;
-  }
+Spending _spendingeFromJson(Map<String, dynamic> data) {
+  return Spending(
+    name: data['name'],
+    price: data['price'],
+    priority: data['priority'],
+  );
+}
 
-  set priority(String priority) {
-    _priority = priority;
-  }
-
-  set date(String date) {
-    _date = date;
-  }
-
-  String get spendingID => _spendingID;
-  String get priority => _priority;
-  String get date => _date;
+Map<String, dynamic> _spendingToJson(Spending spending) {
+  Map<String, dynamic> map = {
+    "name": spending.name,
+    "price": spending.price,
+    "priority": spending.priority
+  };
+  return map;
 }

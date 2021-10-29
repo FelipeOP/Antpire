@@ -2,8 +2,9 @@ import 'package:antpire/src/controllers/auth_controller.dart';
 import 'package:antpire/src/pages/sub_pages/account/user_account.dart';
 import 'package:antpire/src/pages/sub_pages/home/home.dart';
 import 'package:antpire/src/pages/sub_pages/expenses/register_expenses_page.dart';
-import 'package:antpire/src/pages/sub_pages/notifications/notification.dart';
+import 'package:antpire/src/pages/sub_pages/notifications/notification_page.dart';
 import 'package:antpire/src/pages/sub_pages/reports/spending_page.dart';
+import 'package:antpire/src/pages/sub_pages/notifications/notification.dart';
 import 'package:flutter/material.dart';
 
 class SubRoot extends StatefulWidget {
@@ -45,20 +46,17 @@ class _SubRootState extends State<SubRoot> {
     SpendingPage(),
     Home(),
     Text('Hola'),
+    // NotificationPage(),
     UserAccount()
   ];
 
   void _onItemTapped(int index) {
-    if (index == 3) {
-      final Notifications deiber = Notifications();
-      deiber.init();
-      deiber.showNotification().whenComplete(() => print("ok"));
-    }
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  bool isScrolling = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

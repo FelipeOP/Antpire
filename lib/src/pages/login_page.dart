@@ -190,7 +190,11 @@ class _LoginPageState extends State<LoginPage> {
           side: const BorderSide(width: 1, color: Colors.black)),
       buttonType: ButtonType.google,
       onPressed: () {
-        _authController.signInWithGoogle();
+        try {
+          _authController.signInWithGoogle();
+        } catch (e) {
+          _authController.getErrorMessage(e);
+        }
       },
     );
   }

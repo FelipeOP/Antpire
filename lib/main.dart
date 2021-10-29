@@ -1,5 +1,7 @@
 import 'package:antpire/controller_bindings.dart';
-import 'package:antpire/src/pages/start_page.dart';
+import 'package:antpire/src/pages/root.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // await FirebaseMessaging.instance.getToken();
   runApp(const MyApp());
 }
 
@@ -28,7 +31,7 @@ class MyApp extends StatelessWidget {
       initialBinding: ControllerBindings(),
       debugShowCheckedModeBanner: false,
       title: "Antpire",
-      home: const StartPage(),
+      home: const Root(),
       // initialRoute: StartPage.id,
     );
   }

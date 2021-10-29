@@ -1,19 +1,22 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 import 'package:antpire/src/models/person.dart';
 import 'package:antpire/src/pages/root.dart';
+import 'package:antpire/src/services/firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'dart:convert';
 
 class AuthController extends GetxController {
   var displayName = '';
+  var userID = '';
+  var userEmail = '';
   var isSignedIn = false.obs;
   final _googleSignIn = GoogleSignIn();
   var googleAccount = Rx<GoogleSignInAccount?>(null);
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   User? get userProfile => auth.currentUser;
@@ -21,7 +24,17 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     displayName = userProfile != null ? userProfile!.displayName! : '';
+    userID = userProfile != null ? userProfile!.uid : '';
+    userEmail = userProfile != null ? userProfile!.email! : '';
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    displayName = '';
+    userID = '';
+    userEmail = '';
+    super.dispose();
   }
 
   void signUp(Person person) async {
@@ -30,33 +43,17 @@ class AuthController extends GetxController {
           .createUserWithEmailAndPassword(
               email: person.email, password: person.password)
           .then((value) {
-        displayName = person.names;
-        auth.currentUser!.updateDisplayName(person.names);
+        displayName = person.names + ' ' + person.surnames;
+        userID = userProfile!.uid;
+        userProfile!.updateDisplayName(displayName);
+        Firestore().addUser(person.toMap());
       });
       update();
-      addUserInformation(person);
       Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
-      String title = e.code;
-      String message = '';
-
-      if (e.code == 'weak-password') {
-        message = 'La contraseña dada es muy debil';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'Hay una cuenta con ese correo';
-      } else {
-        message = e.message.toString();
-      }
-
-      Get.snackbar(title, message,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     } catch (e) {
-      Get.snackbar('Error occured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
   }
 
@@ -64,49 +61,47 @@ class AuthController extends GetxController {
     try {
       await auth
           .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => displayName = userProfile!.displayName!);
+          .then((value) {
+        displayName = userProfile!.displayName!;
+        userID = userProfile!.uid;
+        userEmail = userProfile!.email!;
+      });
       isSignedIn.value = true;
       update();
       Get.offAll(() => const Root());
     } on FirebaseAuthException catch (e) {
-      String title = '';
-      String message = '';
-      if (e.code == 'wrong-password') {
-        title = 'Contraseña incorrecta!';
-        message = 'Contraseña inválida. Por favor inténtalo de nuevo';
-      } else if (e.code == 'user-not-found') {
-        title = 'El usuario no está registrado.';
-        message =
-            ('La cuenta no existe para $email. Crea tu cuenta para iniciar sesión.');
-      } else {
-        title = 'Se ha producido un error inesperado.';
-        message = e.message.toString();
-      }
-
-      Get.snackbar(title, message,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     } catch (e) {
-      Get.snackbar('Error occured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
+  }
+
+  Map<String, dynamic> userGoogleToJson(int salary, String frequency) {
+    List<String> fullName = displayName.split(' ');
+    Map<String, dynamic> googleUser = {
+      'names': fullName[0],
+      'surnames': fullName[1],
+      'email': userEmail,
+      'salary': salary,
+      'frequency': frequency
+    };
+    return googleUser;
   }
 
   void signInWithGoogle() async {
     try {
-      googleAccount.value = await _googleSignIn.signIn();
-      displayName = googleAccount.value!.displayName!;
+      googleAccount.value = await _googleSignIn.signIn().then((result) {
+        result!.authentication.then((googleKey) {
+          userID = googleKey.idToken!.substring(0, 28);
+          displayName = _googleSignIn.currentUser!.displayName!;
+          userEmail = _googleSignIn.currentUser!.email;
+        });
+      });
       isSignedIn.value = true;
       update(); // <-- without this the isSignedin value is not updated.
       Get.offAll(() => const Root());
     } catch (e) {
-      Get.snackbar('Error occured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
   }
 
@@ -115,59 +110,94 @@ class AuthController extends GetxController {
       await auth.sendPasswordResetEmail(email: email);
       Get.back();
     } on FirebaseAuthException catch (e) {
-      String title = '';
-      String message = '';
-
-      if (e.code == 'user-not-found') {
-        message =
-            ('La cuenta no existe para $email. Crea tu cuenta para iniciar sesión');
-      } else {
-        message = e.message.toString();
-      }
-
-      Get.snackbar(title, message,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     } catch (e) {
-      Get.snackbar('Error ocured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
   }
 
-  void signout() async {
+  void signOut() async {
     try {
       await auth.signOut();
       await _googleSignIn.signOut();
       displayName = '';
+      userID = '';
+      userEmail = '';
       isSignedIn.value = false;
       update();
       Get.offAll(() => const Root());
     } catch (e) {
-      Get.snackbar('Error occured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
   }
 
-  Future<void> addUserInformation(Person person) async {
+  Future<void> deleteAccount() async {
     try {
-      await _firestore
-          .collection('users')
-          .doc(auth.currentUser!.uid.toString())
-          .collection('data')
-          .doc('private')
-          .set(person.toMap());
+      if (userProfile != null) {
+        userProfile!.delete();
+      }
+      Firestore().deleteUser();
+      isSignedIn.value = false;
+      update();
+      Get.offAll(() => const Root());
     } catch (e) {
-      Get.snackbar('Error occured!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      getErrorMessage(e);
     }
   }
 
-  Future<void> addFinalcialInformation() async {}
+  // ignore: prefer_void_to_null
+  Future<Null> getErrorMessage(dynamic e) async {
+    String title = e.toString();
+    String message = '';
+
+    if (e is FirebaseAuthException || e is FirebaseException) {
+      title = e.code.toString();
+    }
+
+    switch (title) {
+      case 'Null check operator used on a null value':
+        title = 'Valores nulos';
+        message = 'Es posible que haya información sin completar';
+        break;
+      case 'wrong-password':
+        title = 'Contraseña incorrecta!';
+        message = 'Contraseña inválida. Por favor inténtalo de nuevo';
+        break;
+      case 'user-not-found':
+        title = 'El usuario no está registrado.';
+        message = ('La cuenta no existe. Crea tu cuenta para iniciar sesión.');
+        break;
+      case 'weak-password':
+        title = 'Contraseña vulnerable';
+        message = 'Incluye por lo menos un número y un caracter especial';
+        break;
+      case 'email-already-in-use':
+        title = 'Correo en uso!';
+        message = 'Ya existe una cuenta con ese correo UnU';
+        break;
+      case 'not-found':
+        title = 'Error 404';
+        message = 'No se encuentra el documento solicitado.';
+        break;
+      default:
+        title = 'Error interno';
+        message = 'Ha ocurrido un error inesperado U.U .';
+    }
+
+    Get.snackbar(title, message,
+        snackPosition: SnackPosition.TOP,
+        isDismissible: true,
+        dismissDirection: SnackDismissDirection.HORIZONTAL);
+  }
+
+  // Actualización 2.0 coming soon 2077
+  /*
+  - White mode 
+  - Dark mode
+  - Machine learning
+  - Fix bugs
+  - launch Deiber 2.0
+  - launch IOS version
+  */
+
 }

@@ -1,36 +1,29 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
-class Notifications {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+class NotificationApi {
+  static final _notifications = FlutterLocalNotificationsPlugin();
 
-  init() {
-    tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation("America/Bogota"));
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings("ic_launcher");
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
+  static Future _notificationDetails() async {
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        'chanel id',
+        'chanel name',
+        importance: Importance.max,
+      ),
     );
-    this.flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      "Your channel",
-      "Channel name",
-      priority: Priority.max,
-      importance: Importance.max,
-    );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
-
-    await this.flutterLocalNotificationsPlugin.show(0, "Deiber ya pudo",
-        "Deiber dentro de la app", platformChannelSpecifics);
-  }
+  static Future showNotification({
+    int id = 0,
+    String? title,
+    String? body,
+    String? payload,
+  }) async =>
+      _notifications.show(
+        id,
+        title,
+        body,
+        await _notificationDetails(),
+        payload: payload,
+      );
 }

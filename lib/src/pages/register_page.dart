@@ -5,6 +5,7 @@ import 'package:antpire/src/pages/start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -21,12 +22,26 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _salaryController = TextEditingController();
-  final TextEditingController _frecuencyController = TextEditingController();
+  final TextEditingController _frequencyController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   static final RegExp _lettersExp =
       RegExp(r"^[\p{L} ]+$", caseSensitive: false, unicode: true, dotAll: true);
   static final RegExp _numbersExp = RegExp(r'^[0-9]+$');
+
+  late FocusNode salaryFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    salaryFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    salaryFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -250,6 +265,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _salary() {
     return TextFormField(
+        focusNode: salaryFocusNode,
         controller: _salaryController,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.number,
@@ -275,13 +291,20 @@ class _RegisterPageState extends State<RegisterPage> {
             return "El campo salario no puede estar vacío";
           }
           if (_numbersExp.hasMatch(salary.toString())) {
-            int finalSalary = int.parse(salary.toString());
-            if (!((finalSalary >= 0))) {
+            double finalSalary = double.parse(salary.toString());
+            if (!((finalSalary >= 50))) {
               return "Ingrese un sueldo válido";
             }
           } else {
             return "Solo debe contener numeros";
           }
+          return salaryFocusNode.hasFocus
+              ? NumberFormat.currency(
+                  locale: 'es_MX',
+                  symbol: r'$ ',
+                  decimalDigits: 0,
+                ).format(int.parse(salary.toString()))
+              : null;
         });
   }
 
@@ -355,7 +378,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       readOnly: true,
-      controller: _frecuencyController,
+      controller: _frequencyController,
       decoration: InputDecoration(
         labelText: "Frecuencia de pago",
         labelStyle: const TextStyle(color: Colors.grey),
@@ -373,7 +396,7 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: const Icon(Icons.arrow_downward, color: Colors.red),
           iconSize: 24,
           onSelected: (String value) {
-            _frecuencyController.text = value;
+            _frequencyController.text = value;
           },
           itemBuilder: (BuildContext context) {
             return <String>['Semanal', 'Quincenal', 'Mensual']
@@ -383,8 +406,8 @@ class _RegisterPageState extends State<RegisterPage> {
           },
         ),
       ),
-      validator: (String? frecuency) {
-        return frecuency.toString().isEmpty
+      validator: (String? frequency) {
+        return frequency.toString().isEmpty
             ? "El campo no puede estar vacío."
             : null;
       },
@@ -420,15 +443,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Person __getUserData() {
-    String _names = _namesController.text.trim();
-    String _surnames = _surnamesController.text.trim();
-    int _age = int.parse(_ageController.text.trim());
-    String _email = _emailController.text.trim();
-    double _salary = double.parse(_salaryController.text.trim());
-    String _password = _passwordController.text.trim();
-    String _frecuency = _frecuencyController.text.trim();
-    Person person =
-        Person(_names, _surnames, _email, _password, _age, _salary, _frecuency);
+    Person person = Person(
+        names: _namesController.text.trim(),
+        surnames: _surnamesController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+        age: int.parse(_ageController.text.trim()),
+        salary: int.parse(_salaryController.text.trim()),
+        frequency: _frequencyController.text.trim());
     return person;
   }
 }
