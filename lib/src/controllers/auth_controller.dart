@@ -4,11 +4,9 @@ import 'package:antpire/src/pages/root.dart';
 import 'package:antpire/src/services/firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart' show Colors;
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:convert';
 
 class AuthController extends GetxController {
   var displayName = '';

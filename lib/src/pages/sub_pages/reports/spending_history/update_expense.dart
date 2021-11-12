@@ -193,7 +193,9 @@ class _RegisterExpensesPageState extends State<UpdateExpensesPage> {
                 name:
                     _nameController.text.trim().toLowerCase().capitalizeFirst!,
                 price: int.parse(_priceController.text.trim()),
-                priority: _priorityController.text.trim());
+                priority: _priorityController.text.trim(),
+                date: widget.spending.date);
+
             Firestore().addSpending(spending).then((value) => Get.snackbar(
                   'Actualizado!',
                   "Se ha guardado correctamente",

@@ -22,6 +22,22 @@ class _RegisterExpensesPageState extends State<RegisterExpensesPage> {
   final TextEditingController _priorityController = TextEditingController();
 
   @override
+  void initState() {
+    _nameController.clear();
+    _priceController.clear();
+    _priorityController.clear();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.clear();
+    _priceController.clear();
+    _priorityController.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var _deiber;
     Config().init(context);
@@ -32,7 +48,7 @@ class _RegisterExpensesPageState extends State<RegisterExpensesPage> {
           padding: const EdgeInsets.all(15.0),
           child: Container(
             width: Config.screenWidth! - 1,
-            height: Config.screenHeight! * 0.80,
+            height: Config.screenHeight! * 0.78,
             color: Colors.white,
             child: InputDecorator(
               decoration: InputDecoration(
@@ -153,6 +169,7 @@ class _RegisterExpensesPageState extends State<RegisterExpensesPage> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           readOnly: true,
           controller: _priorityController,
           decoration: InputDecoration(
@@ -207,12 +224,18 @@ class _RegisterExpensesPageState extends State<RegisterExpensesPage> {
                 name:
                     _nameController.text.trim().toLowerCase().capitalizeFirst!,
                 price: int.parse(_priceController.text.trim()),
-                priority: _priorityController.text.trim());
+                priority: _priorityController.text.trim(),
+                date: DateTime.now());
+
             Firestore().addSpending(spending).then((value) => Get.snackbar(
                   'Registrado!',
                   "Se ha guardado correctamente",
                   snackPosition: SnackPosition.TOP,
                 ));
+
+            _nameController.clear();
+            _priceController.clear();
+            _priorityController.clear();
           }
         });
   }

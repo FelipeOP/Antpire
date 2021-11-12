@@ -1,5 +1,5 @@
 import 'package:antpire/config.dart';
-import 'package:antpire/src/pages/login_page.dart';
+import 'package:antpire/src/pages/authentication/login_page.dart';
 import 'package:antpire/src/pages/sub_pages/sub_root.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';

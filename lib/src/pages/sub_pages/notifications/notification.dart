@@ -1,19 +1,33 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/rxdart.dart';
 
-class NotificationApi {
+class Notifications {
+  //Salamanca por favor no venga aquí
   static final _notifications = FlutterLocalNotificationsPlugin();
+  static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
-    return NotificationDetails(
+    return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'chanel id',
-        'chanel name',
+        'channelId',
+        'channelName',
         importance: Importance.max,
       ),
     );
   }
 
-  static Future showNotification({
+  static Future init({bool initScheduled = false}) async {
+    const android = AndroidInitializationSettings('ic_launcher');
+    const settings = InitializationSettings(android: android);
+    await _notifications.initialize(
+      settings,
+      onSelectNotification: (payload) async {
+        onNotifications.add(payload);
+      },
+    );
+  }
+
+  static Future showNotifications({
     int id = 0,
     String? title,
     String? body,
@@ -24,6 +38,5 @@ class NotificationApi {
         title,
         body,
         await _notificationDetails(),
-        payload: payload,
       );
 }

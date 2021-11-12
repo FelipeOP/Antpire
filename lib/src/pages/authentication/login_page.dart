@@ -1,6 +1,6 @@
 import 'package:antpire/config.dart';
 import 'package:antpire/src/controllers/auth_controller.dart';
-import 'package:antpire/src/pages/restore_page.dart';
+import 'package:antpire/src/pages/authentication/restore_page.dart';
 import 'package:antpire/src/pages/start_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:antpire/config.dart';
 import 'package:antpire/src/controllers/auth_controller.dart';
-import 'package:antpire/src/pages/login_page.dart';
+import 'package:antpire/src/pages/authentication/login_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

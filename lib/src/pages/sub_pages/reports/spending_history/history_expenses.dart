@@ -1,8 +1,7 @@
 import 'package:antpire/config.dart';
 import 'package:antpire/src/models/spending.dart';
 import 'package:antpire/src/models/spending_data_source.dart';
-import 'package:antpire/src/pages/sub_pages/expenses/register_expenses_page.dart';
-import 'package:antpire/src/pages/sub_pages/reports/update_expense.dart';
+import 'package:antpire/src/pages/sub_pages/reports/spending_history/update_expense.dart';
 import 'package:antpire/src/services/firestore.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +18,7 @@ class GridTable extends StatefulWidget {
 class _GridTableState extends State<GridTable> {
   late SpendingDataSource _spendingDataSource;
   late DataGridController _dataGridController;
+
   @override
   void initState() {
     super.initState();
@@ -53,14 +53,13 @@ class _GridTableState extends State<GridTable> {
           if (snapshot.hasData) {
             return SfDataGrid(
               controller: _dataGridController,
+              source: _spendingDataSource,
               startSwipeActionsBuilder: startSwipeActions,
               endSwipeActionsBuilder: endSwipeActions,
               allowSwiping: true,
               swipeMaxOffset: 150,
-              source: _spendingDataSource,
               allowSorting: true,
               allowPullToRefresh: true,
-              columnWidthMode: ColumnWidthMode.fill,
               columns: _gridColumns,
             );
           } else {
@@ -96,10 +95,6 @@ class _GridTableState extends State<GridTable> {
 
   AwesomeDialog editSpendingData(Spending spending) {
     return AwesomeDialog(
-      // customHeader: CircleAvatar(
-      //     radius: Config.screenHeight! * 0.1,
-      //     backgroundImage: const AssetImage('images/yo.jpeg'),
-      //     backgroundColor: Colors.white),
       context: context,
       animType: AnimType.SCALE,
       dialogType: DialogType.INFO_REVERSED,
@@ -165,7 +160,15 @@ class _GridTableState extends State<GridTable> {
               alignment: Alignment.center,
               child: const Text('Prioridad', overflow: TextOverflow.ellipsis
                   //style: TextStyle(color: red, fontSize: 20),
-                  )))
+                  ))),
+      GridColumn(
+          columnName: 'date',
+          label: Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              child: const Text('Fecha', overflow: TextOverflow.ellipsis
+                  //style: TextStyle(color: red, fontSize: 20),
+                  ))),
     ];
   }
 }

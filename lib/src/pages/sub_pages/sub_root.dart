@@ -45,8 +45,7 @@ class _SubRootState extends State<SubRoot> {
     RegisterExpensesPage(),
     SpendingPage(),
     Home(),
-    Text('Hola'),
-    // NotificationPage(),
+    NotificationPage(),
     UserAccount()
   ];
 
@@ -56,7 +55,6 @@ class _SubRootState extends State<SubRoot> {
     });
   }
 
-  bool isScrolling = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
